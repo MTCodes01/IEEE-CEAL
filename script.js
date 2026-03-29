@@ -115,7 +115,8 @@ function animateCountUp(config) {
 }
 
 // Initialize all animations
-function startCountUpAnimations() {
+async function startCountUpAnimations() {
+  await window.fetchDynamicStats(countUpConfig, true, null);
   Object.values(countUpConfig).forEach(config => {
     animateCountUp(config);
   });
