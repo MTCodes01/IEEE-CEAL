@@ -208,6 +208,8 @@ async function hydratePage() {
   
   if (path.includes('/about/')) {
     pageName = 'about';
+  } else if (path.includes('/events/')) {
+    pageName = 'events';
   } else if (path.includes('/societies/')) {
     // Handling society pages is different (done in members.js or similar)
     return;

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/responsive.css">
+    <title>Events - IEEE CEAL</title>
+    <style>
+        .events-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .year-filters {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .year-chip {
+            padding: 0.6rem 1.2rem;
+            background: #f0f2f5;
+            color: #7f8c8d;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .year-chip:hover {
+            background: #e4e6eb;
+            transform: translateY(-2px);
+        }
+
+        .year-chip.active {
+            background: #0055A4;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 85, 164, 0.3);
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0055A4;
+            box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nav bar -->
+    <div id="NavBar"></div>
+
+    <!-- Hero Section -->
+    <div class="landing-page">
+        <div class="landing-content">
+            <h1 id="page-title">Our Events</h1>
+            <p id="page-subtitle">Exploring the latest in technology and innovation through our activities.</p>
+        </div>
+    </div>
+
+    <!-- Logo Bar -->
+    <div class="bg-gray-100 py-6 px-4">
+        <div id="LogoBar" class="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12 max-w-7xl mx-auto">
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-CS_logo-color.png" alt="IEEE Computer Society Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-EMBS_Logo-color.png" alt="IEEE EMBS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PELS_Logo-color.png" alt="IEEE PELS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PES_Logo-color.png" alt="IEEE PES Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-RAS_Logo-color.png" alt="IEEE RAS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-SPS_Logo-color.png" alt="IEEE SPS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-WIE_logo-color.png" alt="IEEE WIE Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-IAS_Logo-color.png" alt="IEEE IAS Logo" />
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="events-container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="year-filters" id="year-filters">
+                    <div class="year-chip active" onclick="filterByYear('all', this)">All Years</div>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="event-search" class="search-input" placeholder="Search events..." onkeyup="debounceSearch(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Grid -->
+        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+            <!-- Loading State Initially -->
+            <div class="col-span-full text-center py-20 text-gray-500" id="loading-state">
+                <i class="fa-solid fa-spinner fa-spin text-4xl mb-4"></i>
+                <p>Fetching events...</p>
+            </div>
+            
+            <!-- Empty State -->
+            <div class="col-span-full text-center py-20 text-gray-500 hidden" id="empty-state">
+                <i class="fa-solid fa-calendar-xmark text-4xl mb-4"></i>
+                <p>No events found for the selected filters.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="Footer"></div>
+
+    <script src="/config.js"></script>
+    <script src="/script.js"></script>
+    <script src="events.js"></script>
+    <script src="/loader.js"></script>
+</body>
+
+</html>
