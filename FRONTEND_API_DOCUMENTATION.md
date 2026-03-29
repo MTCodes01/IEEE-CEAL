@@ -17,6 +17,9 @@ http://127.0.0.1:8000/api/
 - [Get All Years](#get-all-years)
 - [Get Events](#get-events)
 - [Get Gallery Images](#get-gallery-images)
+- [Get All Societies](#get-all-societies)
+- [Get Society Detail](#get-society-detail)
+- [Get Years by Category](#get-years-by-category)
 
 ### Admin & Management APIs
 - [Get Roles by Society](#get-roles-by-society)
@@ -292,6 +295,121 @@ GET /api/gallery/?year=2025&event_name=Tech Talk 2025
   - `event_name` - Associated event name (optional)
   - `upload_date` - Upload timestamp (format: `YYYY-MM-DD HH:MM:SS`)
   - `year` - Year the image was uploaded
+
+[Back to top](#table-of-contents)
+
+---
+
+---
+
+### Get All Societies
+
+Retrieve a list of all societies ordered by their display order.
+
+**Endpoint:** `GET /api/societies/`
+
+**Example Request:**
+```javascript
+fetch('/api/societies/')
+  .then(response => response.json())
+  .then(data => console.log(data.societies));
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "societies": [
+    {
+      "id": 1,
+      "name": "CS",
+      "full_name": "Computer Society",
+      "order": 1
+    }
+  ]
+}
+```
+
+[Back to top](#table-of-contents)
+
+---
+
+### Get Society Detail
+
+Retrieve detailed information about a specific society, including its execom members and counts.
+
+**Endpoint:** `GET /api/society/<society_id>/`
+
+**Query Parameters (optional):**
+- `year` - Filter the returned execom list to a specific year (default is the latest year with data).
+
+**Example Request:**
+```javascript
+fetch('/api/society/1/?year=2025')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "society": {
+    "id": 1,
+    "name": "CS",
+    "full_name": "Computer Society",
+    "order": 1
+  },
+  "execom_year": 2025,
+  "execom": [
+    {
+      "id": 10,
+      "name": "Alice Sub",
+      "role": "Chair",
+      "photo_url": "",
+      "email": "",
+      "linkedin": "",
+      "instagram": "",
+      "github": "",
+      "website": ""
+    }
+  ],
+  "counts": {
+    "total_members": 4,
+    "total_events": 2,
+    "total_all": 6
+  }
+}
+```
+
+[Back to top](#table-of-contents)
+
+---
+
+### Get Years by Category
+
+Retrieve all years that contain data, broken down by category (execom, gallery, events).
+
+**Endpoint:** `GET /api/years/`
+
+**Example Request:**
+```javascript
+fetch('/api/years/')
+  .then(response => response.json())
+  .then(data => console.log(data.years));
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "years": {
+    "execom": [2025, 2024],
+    "gallery": [2025, 2024, 2023],
+    "events": [2025, 2024]
+  }
+}
+```
 
 [Back to top](#table-of-contents)
 
