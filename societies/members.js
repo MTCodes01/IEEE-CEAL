@@ -9,9 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Fetch available years from the API
 async function fetchAvailableYears() {
     try {
-        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
-            ? CONFIG.API_BASE_URL 
-            : 'http://127.0.0.1:8000/api';
+        const apiBaseUrl = CONFIG.API_BASE_URL;
         
         const res = await fetch(`${apiBaseUrl}/allyears/`);
         const response = await res.json();
@@ -28,9 +26,7 @@ async function fetchAvailableYears() {
 
 async function fetchPeopleBySociety(society, requestedYear) {
     try {
-        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
-            ? CONFIG.API_BASE_URL 
-            : 'http://127.0.0.1:8000/api';
+        const apiBaseUrl = CONFIG.API_BASE_URL;
 
         // Check if year was explicitly selected via URL parameter
         const urlParams = new URLSearchParams(window.location.search);

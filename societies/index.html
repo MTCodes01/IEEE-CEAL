@@ -337,8 +337,7 @@
 
         async function loadSocieties() {
             const grid = document.getElementById('society-grid');
-            const apiBase = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL)
-                ? CONFIG.API_BASE_URL : 'http://127.0.0.1:8000/api';
+            const apiBase = CONFIG.API_BASE_URL;
 
             try {
                 const res = await fetch(`${apiBase}/societies/`);

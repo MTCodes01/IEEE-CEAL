@@ -99,10 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!dropdown) return;
 
         try {
-          // Get API base URL - check if CONFIG exists, otherwise use default
-          const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
-            ? CONFIG.API_BASE_URL 
-            : 'http://127.0.0.1:8000/api';
+          // Get API base URL
+          const apiBaseUrl = CONFIG.API_BASE_URL;
 
           // Fetch available years from API
           const response = await fetch(`${apiBaseUrl}/allyears/`);
@@ -140,9 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dropdown = document.getElementById('societies-nav-dropdown');
         if (!dropdown) return;
 
-        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL)
-          ? CONFIG.API_BASE_URL
-          : 'http://127.0.0.1:8000/api';
+        const apiBaseUrl = CONFIG.API_BASE_URL;
 
         try {
           const response = await fetch(`${apiBaseUrl}/societies/`);
