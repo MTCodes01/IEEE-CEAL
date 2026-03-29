@@ -1,21 +1,113 @@
 document.addEventListener("DOMContentLoaded", function () {
     const url = new URL(window.location.href);
     const society = url.pathname.split('/').slice(-2, -1)[0] || '';
-    console.log("Society:", society);
-    fetchPeopleBySociety(society);
-    // document.querySelector('.landing-content h1').innerHTML = `${society.toUpperCase()}`;
+    const requestedYear = new URLSearchParams(window.location.search).get("year") || new Date().getFullYear();
+    console.log("Society:", society, "Year:", requestedYear);
+    fetchPeopleBySociety(society, requestedYear);
 });
-async function fetchPeopleBySociety(society) {
-    console.log("Fetching data for society:", society);
-    let res = await fetch(`/execom/data.json`);
-    let data = await res.json();
 
-    if (!data || !data.heading || !data.heading.Society) {
-        alert("This year details not updated yet");
-        return;
+// Fetch available years from the API
+async function fetchAvailableYears() {
+    try {
+        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
+            ? CONFIG.API_BASE_URL 
+            : 'http://127.0.0.1:8000/api';
+        
+        const res = await fetch(`${apiBaseUrl}/allyears/`);
+        const response = await res.json();
+        
+        if (response.allyears && Array.isArray(response.allyears)) {
+            return response.allyears.sort((a, b) => b - a);
+        }
+        return [];
+    } catch (error) {
+        console.error('Error fetching available years:', error);
+        return [];
     }
-    console.log({ [society]: data.heading.Society[society] })
-    CreateSocietySections({ [society]: data.heading.Society[society] } || { [society]: [] });
+}
+
+async function fetchPeopleBySociety(society, requestedYear) {
+    try {
+        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
+            ? CONFIG.API_BASE_URL 
+            : 'http://127.0.0.1:8000/api';
+
+        // Check if year was explicitly selected via URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const explicitYearSelection = urlParams.has('year');
+
+        // Get the list of available years
+        const availableYears = await fetchAvailableYears();
+        
+        if (availableYears.length === 0) {
+            showEmptyState('Unable to fetch available years. Please try again later.');
+            return;
+        }
+
+        let yearToTry = requestedYear;
+        let foundData = false;
+        let societyMembers = null;
+
+        // If year was explicitly selected from dropdown, only try that year
+        if (explicitYearSelection) {
+            try {
+                const res = await fetch(`${apiBaseUrl}/GetExecomDataByYear/${requestedYear}/`);
+                const response = await res.json();
+
+                // Check if we got valid data for this society
+                if (response.status !== 'error' && response.heading && response.heading.Society && response.heading.Society[society]) {
+                    societyMembers = response.heading.Society[society];
+                    yearToTry = requestedYear;
+                    foundData = true;
+                } else {
+                    // No data for this society in this year
+                    showEmptyState(`No ${society} execom data available for year ${requestedYear}.`);
+                    return;
+                }
+            } catch (error) {
+                console.error(`Error fetching data for year ${requestedYear}:`, error);
+                showEmptyState(`Failed to load ${society} execom data for year ${requestedYear}.`);
+                return;
+            }
+        } else {
+            // No explicit year selection - use fallback logic to find latest year with data
+            for (const year of availableYears) {
+                if (year > requestedYear) {
+                    continue;
+                }
+
+                try {
+                    const res = await fetch(`${apiBaseUrl}/GetExecomDataByYear/${year}/`);
+                    const response = await res.json();
+
+                    // Check if we got valid data for this society
+                    if (response.status !== 'error' && response.heading && response.heading.Society && response.heading.Society[society] && response.heading.Society[society].length > 0) {
+                        societyMembers = response.heading.Society[society];
+                        yearToTry = year;
+                        foundData = true;
+                        break;
+                    }
+                } catch (error) {
+                    console.error(`Error fetching data for year ${year}:`, error);
+                }
+            }
+
+            if (!foundData || !societyMembers || societyMembers.length === 0) {
+                showEmptyState(`No ${society} execom data available for any year. Please check back later.`);
+                return;
+            }
+        }
+
+        // Log if we're showing a different year than requested
+        if (yearToTry != requestedYear) {
+            console.log(`Showing data for year ${yearToTry} (requested: ${requestedYear})`);
+        }
+
+        CreateSocietySections({ [society]: societyMembers });
+    } catch (error) {
+        console.error('Error fetching society data:', error);
+        showEmptyState('Failed to load society data. Please try again later.');
+    }
 }
 
 const observer = new IntersectionObserver((entries, obs) => {
@@ -26,6 +118,7 @@ const observer = new IntersectionObserver((entries, obs) => {
         }
     });
 }, { threshold: 0.2 });
+
 function observeCards() {
     const cards = document.querySelectorAll('.person-card');
     cards.forEach(card => observer.observe(card));
@@ -47,10 +140,13 @@ function CreateSocietySections(societies) {
         societies[societyName].forEach((person, idx) => {
             const card = document.createElement('div');
             card.className = 'person-card';
+            
+            const photoUrl = person.photo_url || `/images/execom_2025/${person.name.toLowerCase().split(' ')[0]}.png`;
+            
             card.innerHTML = `
-                <img class="person-photo" src="/images/execom_2025/${person.photo_url || person.name.toLowerCase().split(' ')[0]}.png" onerror="this.onerror=null; this.src='/images/execom_2025/default.png';" alt="${person.name}" />
+                <img class="person-photo" src="${photoUrl}" onerror="this.onerror=null; this.src='/images/execom_2025/default.png';" alt="${person.name}" />
                 <div class="person-name">${toTitleCase(person.name || '')}</div>
-                <div class="person-society">${person.society || societyName || ''}</div>
+                <div class="person-society">${societyName || ''}</div>
                 <div class="person-role">${toTitleCase(person.role || '')}</div>
                 <div class="person-contact">
                     ${person.email ? `<a href="https://mail.google.com/mail/?view=cm&fs=1&to=${person.email}" target="_blank" title="Mail"><i class="fa-solid fa-envelope"></i></a>` : ''}
@@ -71,7 +167,57 @@ function CreateSocietySections(societies) {
 
 function toTitleCase(str) {
     if (!str) {
-      return ""
-  }
-  return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+        return "";
+    }
+    return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+}
+
+// Show empty state when no data is available
+function showEmptyState(message) {
+    const teamDiv = document.getElementById('team');
+    const society = new URL(window.location.href).pathname.split('/').slice(-2, -1)[0] || '';
+    teamDiv.innerHTML = `
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 400px;
+        ">
+            <i class="fas fa-users-slash" style="
+                font-size: 5rem;
+                color: var(--text-light);
+                margin-bottom: 2rem;
+                opacity: 0.5;
+            "></i>
+            <h2 style="
+                font-size: 2rem;
+                color: var(--text-dark);
+                margin-bottom: 1rem;
+                font-weight: 600;
+            ">No Data Available</h2>
+            <p style="
+                font-size: 1.2rem;
+                color: var(--text-light);
+                max-width: 600px;
+                line-height: 1.6;
+            ">${message}</p>
+            <a href="/societies/${society}" style="
+                margin-top: 2rem;
+                background: var(--gradient-primary);
+                color: white;
+                padding: 12px 30px;
+                border-radius: 50px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: var(--transition);
+                display: inline-block;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(0, 85, 164, 0.3)'"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                View Latest ${society} Execom
+            </a>
+        </div>
+    `;
 }

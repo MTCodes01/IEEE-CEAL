@@ -4,19 +4,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore IEEE CEAL's technical societies including CS, EMBS, IAS, PELS, PES, RAS, SPS, and WIE.">
+    <title>Societies — IEEE CEAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/execom/style.css">
     <link rel="stylesheet" href="/responsive.css">
-    <title>IEEE CEAL</title>
     <style>
-        .person-card {
-            opacity: 1;
+        body, html {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        .society-header {
-            margin-top: 10vh;
+        /* ── Hero ──────────────────────────────────────────── */
+        .societies-hero {
+            min-height: 55vh;
+            background: url('/images/ieee-ceal-2k25.png') no-repeat center center / cover;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .societies-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            padding: 0 1.5rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.2rem, 5.5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            font-weight: 300;
+            opacity: 0.9;
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        /* ── Section wrapper ───────────────────────────────── */
+        .societies-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem 6rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-label {
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            margin: 0.9rem auto 0;
+        }
+
+        /* ── Society grid ──────────────────────────────────── */
+        .society-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1.75rem;
+            width: 100%;
+        }
+
+        /* ── Society card ──────────────────────────────────── */
+        .soc-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,85,164,0.09);
+            border: 1px solid rgba(0,85,164,0.08);
+            padding: 2.25rem 1.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(28px);
+        }
+
+        .soc-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.55s ease, transform 0.55s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .soc-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s ease;
+        }
+
+        .soc-card:hover::before { transform: scaleX(1); }
+
+        .soc-card:hover {
+            box-shadow: 0 20px 55px rgba(0,85,164,0.18);
+            border-color: var(--accent);
+            transform: translateY(-8px) scale(1.015);
+        }
+
+        .soc-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8f0fb 0%, #d0e3f5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .soc-icon i {
+            font-size: 1.75rem;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .soc-card:hover .soc-icon {
+            background: var(--gradient-primary);
+        }
+
+        .soc-card:hover .soc-icon i {
+            color: #fff;
+        }
+
+        .soc-abbr {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .soc-name {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .soc-arrow {
+            margin-top: 0.75rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,85,164,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .soc-card:hover .soc-arrow {
+            background: var(--accent);
+            color: #fff;
+            transform: translateX(3px);
+        }
+
+        /* ── Skeleton loaders ──────────────────────────────── */
+        .soc-skeleton {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,85,164,0.06);
+            padding: 2.25rem 1.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .skel-circle {
+            width: 68px; height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        .skel-line {
+            height: 14px;
+            border-radius: 7px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0%   { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        /* ── Empty / error state ───────────────────────────── */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.4;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .society-grid { gap: 1rem; }
+            .soc-card { padding: 1.5rem 1rem 1.25rem; }
+            .soc-abbr { font-size: 1.2rem; }
+            .soc-name { font-size: 0.82rem; }
         }
     </style>
 </head>
@@ -25,59 +285,138 @@
     <!-- Nav bar -->
     <div id="NavBar"></div>
 
-    <section class="society-grid-section">
-        <h2 class="society-header">Explore Our Societies</h2>
-        <div class="society-container">
-            <a href="./CS/" class="person-card" aria-label="Visit Computer Society">
-                <h3 class="person-name">CS</h3>
-                <p class="person-society">Computer Society</p>
-            </a>
-
-            <a href="./EMBS/" class="person-card" aria-label="Visit EMBS">
-                <h3 class="person-name">EMBS</h3>
-                <p class="person-society">Engineering in Medicine & Biology</p>
-            </a>
-
-            <a href="./IAS/" class="person-card" aria-label="Visit IAS">
-                <h3 class="person-name">IAS</h3>
-                <p class="person-society">Industry Applications Society</p>
-            </a>
-
-            <a href="./PELS/" class="person-card" aria-label="Visit PELS">
-                <h3 class="person-name">PELS</h3>
-                <p class="person-society">Power Electronics Society</p>
-            </a>
-
-            <a href="./PES/" class="person-card" aria-label="Visit PES">
-                <h3 class="person-name">PES</h3>
-                <p class="person-society">Power & Energy Society</p>
-            </a>
-
-            <a href="./RAS/" class="person-card" aria-label="Visit RAS">
-                <h3 class="person-name">RAS</h3>
-                <p class="person-society">Robotics & Automation</p>
-            </a>
-
-            <a href="./SPS/" class="person-card" aria-label="Visit SPS">
-                <h3 class="person-name">SPS</h3>
-                <p class="person-society">Signal Processing Society</p>
-            </a>
-
-            <a href="./WIE/" class="person-card" aria-label="Visit WIE">
-                <h3 class="person-name">WIE</h3>
-                <p class="person-society">Women in Engineering</p>
-            </a>
+    <!-- Society Grid -->
+    <section class="societies-section">
+        <h2 class="section-title">IEEE CEAL Societies</h2>
+        <div class="society-grid" id="society-grid">
+            <!-- Skeleton loaders -->
+            <div class="soc-skeleton" id="skel-1">
+                <div class="skel-circle"></div>
+                <div class="skel-line" style="width:50px"></div>
+                <div class="skel-line" style="width:140px"></div>
+            </div>
+            <div class="soc-skeleton">
+                <div class="skel-circle"></div>
+                <div class="skel-line" style="width:60px"></div>
+                <div class="skel-line" style="width:160px"></div>
+            </div>
+            <div class="soc-skeleton">
+                <div class="skel-circle"></div>
+                <div class="skel-line" style="width:45px"></div>
+                <div class="skel-line" style="width:130px"></div>
+            </div>
+            <div class="soc-skeleton">
+                <div class="skel-circle"></div>
+                <div class="skel-line" style="width:55px"></div>
+                <div class="skel-line" style="width:150px"></div>
+            </div>
         </div>
     </section>
-
-    <!-- Add more sections here -->
 
     <!-- Footer -->
     <div id="Footer"></div>
 
-    <script src="/script.js"></script>
-    
-    <!-- loader.js loads the navbar and footer dynamically -->
+    <script src="/config.js"></script>
+    <script>
+        // Icon mapping keyed by society abbreviation (name field)
+        const SOCIETY_ICONS = {
+            'CS':   'fa-laptop-code',
+            'EMBS': 'fa-heartbeat',
+            'IAS':  'fa-industry',
+            'PELS': 'fa-bolt',
+            'PES':  'fa-plug',
+            'RAS':  'fa-robot',
+            'SPS':  'fa-wave-square',
+            'WIE':  'fa-venus',
+            'IEEE': 'fa-globe',
+        };
+
+        function getIcon(name) {
+            return SOCIETY_ICONS[name] || 'fa-microchip';
+        }
+
+        async function loadSocieties() {
+            const grid = document.getElementById('society-grid');
+            const apiBase = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL)
+                ? CONFIG.API_BASE_URL : 'http://127.0.0.1:8000/api';
+
+            try {
+                const res = await fetch(`${apiBase}/societies/`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+
+                let societies = data.societies || data.data || data;
+                if (!Array.isArray(societies) || societies.length === 0) throw new Error('empty');
+
+                // Filter out Professional Execom (id 1) and IEEE SB CEAL (id 2)
+                societies = societies.filter(soc => soc.id !== 1 && soc.id !== 2);
+
+                // Sort alphabetically by ascending name
+                societies.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+                grid.innerHTML = '';
+
+                societies.forEach((soc, i) => {
+                    const card = document.createElement('a');
+                    card.className = 'soc-card';
+                    card.href = `/societies/${soc.name}/`;
+                    card.setAttribute('aria-label', `Visit ${soc.full_name || soc.name}`);
+                    card.style.transitionDelay = `${i * 60}ms`;
+
+                    card.innerHTML = `
+                        <div class="soc-icon">
+                            <i class="fas ${getIcon(soc.name)}"></i>
+                        </div>
+                        <span class="soc-abbr">${soc.name}</span>
+                        <span class="soc-name">${soc.full_name || ''}</span>
+                        <div class="soc-arrow"><i class="fas fa-arrow-right"></i></div>
+                    `;
+                    grid.appendChild(card);
+
+                    // Trigger entrance animation
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => card.classList.add('visible'));
+                    });
+                });
+
+            } catch (err) {
+                console.error('Failed to load societies from API, using static fallback.', err);
+                renderFallback(grid);
+            }
+        }
+
+        function renderFallback(grid) {
+            const fallback = [
+                { name: 'CS',   full_name: 'Computer Society' },
+                { name: 'EMBS', full_name: 'Engineering in Medicine & Biology' },
+                { name: 'IAS',  full_name: 'Industry Applications Society' },
+                { name: 'PELS', full_name: 'Power Electronics Society' },
+                { name: 'PES',  full_name: 'Power & Energy Society' },
+                { name: 'RAS',  full_name: 'Robotics & Automation Society' },
+                { name: 'SPS',  full_name: 'Signal Processing Society' },
+                { name: 'WIE',  full_name: 'Women in Engineering' },
+            ];
+
+            grid.innerHTML = '';
+            fallback.forEach((soc, i) => {
+                const card = document.createElement('a');
+                card.className = 'soc-card';
+                card.href = `/societies/${soc.name}/`;
+                card.setAttribute('aria-label', `Visit ${soc.full_name}`);
+                card.style.transitionDelay = `${i * 60}ms`;
+                card.innerHTML = `
+                    <div class="soc-icon"><i class="fas ${getIcon(soc.name)}"></i></div>
+                    <span class="soc-abbr">${soc.name}</span>
+                    <span class="soc-name">${soc.full_name}</span>
+                    <div class="soc-arrow"><i class="fas fa-arrow-right"></i></div>
+                `;
+                grid.appendChild(card);
+                requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('visible')));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSocieties);
+    </script>
     <script src="/loader.js"></script>
 </body>
 

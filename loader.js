@@ -134,6 +134,45 @@ document.addEventListener("DOMContentLoaded", () => {
           dropdown.appendChild(li);
         }
       })();
+
+      // Populate Societies navbar dropdown dynamically from API
+      (async function populateSocietiesDropdown() {
+        const dropdown = document.getElementById('societies-nav-dropdown');
+        if (!dropdown) return;
+
+        const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL)
+          ? CONFIG.API_BASE_URL
+          : 'http://127.0.0.1:8000/api';
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/societies/`);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+
+          let societies = data.societies || data.data || data;
+          if (!Array.isArray(societies) || societies.length === 0) throw new Error('empty');
+
+          // Filter out Professional Execom (id 1) and IEEE SB CEAL (id 2)
+          societies = societies.filter(soc => soc.id !== 1 && soc.id !== 2);
+
+          // Sort alphabetically by ascending name
+          societies.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+          // Replace static content with API-driven links
+          dropdown.innerHTML = '';
+          societies.forEach(soc => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `/societies/${soc.name}/`;
+            a.textContent = soc.full_name || soc.name;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+          });
+        } catch (err) {
+          console.warn('Societies dropdown: API unavailable, keeping static links.', err);
+          // Static links already in the HTML — nothing to do
+        }
+      })();
     });
 
   // Load footer from site root
