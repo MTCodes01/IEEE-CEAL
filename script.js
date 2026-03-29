@@ -1,4 +1,5 @@
 const API_URL = CONFIG.API_BASE_URL;
+const PAGE_API_URL = `${API_URL}/pages/`;
 
 let latestYear = null;
 
@@ -201,7 +202,69 @@ function AnimateLogoBar() {
   }, startDelay);
 }
 
+async function hydratePage() {
+  const path = window.location.pathname;
+  let pageName = 'home';
+  
+  if (path.includes('/about/')) {
+    pageName = 'about';
+  } else if (path.includes('/societies/')) {
+    // Handling society pages is different (done in members.js or similar)
+    return;
+  }
+  
+  try {
+    const response = await fetch(`${PAGE_API_URL}${pageName}/`);
+    const data = await response.json();
+    
+    if (data.status === 'success' && data.page) {
+      const page = data.page;
+      
+      // Update Hero Section
+      const landingPage = document.querySelector('.landing-page');
+      const landingTitle = document.querySelector('.landing-content h1');
+      const landingSubtitle = document.querySelector('.landing-content p');
+      
+      if (page.main_image_url && landingPage) {
+        landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
+      }
+      if (page.title && landingTitle) landingTitle.innerText = page.title;
+      if (page.subtitle && landingSubtitle) landingSubtitle.innerText = page.subtitle;
+      
+      // Update About Section
+      const aboutSection = document.querySelector('.about-section');
+      if (aboutSection) {
+        const aboutTitle = aboutSection.querySelector('.left-column h1');
+        const aboutSubtitle = aboutSection.querySelector('.left-column h2');
+        const aboutDescription = aboutSection.querySelector('.right-column p');
+        const aboutPointsList = aboutSection.querySelector('.right-column ul');
+        
+        // Use specific fields or description depending on the page
+        if (pageName === 'home') {
+           // On home page, maybe description is the "About" text
+           if (page.description && aboutDescription) aboutDescription.innerText = page.description;
+        } else {
+           // On about page
+           if (page.title && aboutTitle) aboutTitle.innerText = page.title;
+           if (page.subtitle && aboutSubtitle) aboutSubtitle.innerText = page.subtitle;
+           if (page.description && aboutDescription) aboutDescription.innerText = page.description;
+        }
+        
+        // Handle extra_data points if any
+        if (page.extra_data && page.extra_data.points && Array.isArray(page.extra_data.points) && aboutPointsList) {
+          aboutPointsList.innerHTML = page.extra_data.points.map(point => `<li>${point}</li>`).join('');
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Dynamic page hydration failed:', error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Hydrate page content from API
+  hydratePage();
+
   // Initialize the stats section
   setupIntersectionObserver(".stats", startCountUpAnimations, { threshold: 0.5, once: true });
 

@@ -87,6 +87,21 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                     }
                 } catch (e) { console.error("Could not fetch main execom members:", e); }
             }
+
+            // --- Apply Manual Overrides for Home Page ---
+            try {
+                const pageRes = await fetch(`${apiBaseUrl}/pages/home/`);
+                if (pageRes.ok) {
+                    const data = await pageRes.json();
+                    if (data.status === 'success' && data.page) {
+                        const page = data.page;
+                        if (page.stat_years && page.stat_years > 0) configObj.years.endValue = page.stat_years;
+                        if (page.stat_members && page.stat_members > 0) configObj.members.endValue = page.stat_members;
+                        if (page.stat_societies && page.stat_societies > 0) configObj.projects.endValue = page.stat_societies;
+                        if (page.stat_events && page.stat_events > 0) configObj.events.endValue = page.stat_events;
+                    }
+                }
+            } catch (e) { console.warn("Could not fetch page overrides:", e); }
         }
     } catch (error) {
         console.error("Error fetching dynamic stats:", error);

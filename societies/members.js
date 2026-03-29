@@ -99,10 +99,67 @@ async function fetchPeopleBySociety(society, requestedYear) {
             console.log(`Showing data for year ${yearToTry} (requested: ${requestedYear})`);
         }
 
+        // --- Fetch Society Detail (Description, Image, Features) ---
+        fetchSocietyInfo(society);
+
         CreateSocietySections({ [society]: societyMembers });
     } catch (error) {
         console.error('Error fetching society data:', error);
         showEmptyState('Failed to load society data. Please try again later.');
+    }
+}
+
+async function fetchSocietyInfo(societyName) {
+    try {
+        const apiBaseUrl = CONFIG.API_BASE_URL;
+        
+        // Find the society by name (from all societies list)
+        const resList = await fetch(`${apiBaseUrl}/societies/`);
+        const dataList = await resList.json();
+        
+        if (dataList.status === 'success' && dataList.societies) {
+            const societyObj = dataList.societies.find(s => s.name === societyName || s.full_name === societyName);
+            if (societyObj) {
+                // Fetch full detail for this society ID
+                const resDetail = await fetch(`${apiBaseUrl}/society/${societyObj.id}/`);
+                const dataDetail = await resDetail.json();
+                
+                if (dataDetail.status === 'success' && dataDetail.society) {
+                    hydrateSocietyUI(dataDetail.society);
+                }
+            }
+        }
+    } catch (error) {
+        console.warn('Error fetching society detail:', error);
+    }
+}
+
+function hydrateSocietyUI(society) {
+    // 1. Update landing/hero
+    const landingH1 = document.querySelector('.landing-content h1');
+    const landingP = document.querySelector('.landing-content p');
+    const landingPage = document.querySelector('.landing-page');
+
+    if (society.name && landingH1) landingH1.innerText = society.name;
+    if (society.full_name && landingP) landingP.innerText = society.full_name;
+    if (society.main_image_url && landingPage) {
+        landingPage.style.backgroundImage = `url('${society.main_image_url}')`;
+    }
+
+    // 2. Update About section
+    const aboutSection = document.querySelector('.about-section');
+    if (aboutSection) {
+        const aboutH2 = aboutSection.querySelector('.left-column h2');
+        const aboutP = aboutSection.querySelector('.right-column p');
+        const aboutUl = aboutSection.querySelector('.right-column ul') || 
+                        aboutSection.querySelector('.right-column li')?.parentElement;
+        
+        if (society.full_name && aboutH2) aboutH2.innerText = `IEEE ${society.full_name}`;
+        if (society.description && aboutP) aboutP.innerText = society.description;
+        
+        if (society.features && Array.isArray(society.features) && society.features.length > 0 && aboutUl) {
+            aboutUl.innerHTML = society.features.map(f => `<li>${f}</li>`).join('');
+        }
     }
 }
 
