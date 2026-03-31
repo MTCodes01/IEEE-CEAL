@@ -159,6 +159,55 @@
   <script src="./script.js"></script>
   <script src="./loader.js"></script>
 
+  <script>
+  async function loadHomeContent() {
+    try {
+      const response = await fetch(`${CONFIG.API_BASE_URL}/pages/home/`);
+      const data = await response.json();
+      if (data.status === 'success') {
+        const page = data.page;
+        
+        // Hero Section
+        const heroTitle = document.querySelector('.landing-content h1');
+        const heroTagline = document.querySelector('.landing-content p');
+        const landingPage = document.querySelector('.landing-page');
+        
+        if (page.title) heroTitle.textContent = page.title;
+        if (page.subtitle) heroTagline.textContent = page.subtitle;
+        if (page.main_image_url) {
+          landingPage.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${page.main_image_url}')`;
+        }
+
+        // About Section
+        const aboutTitle = document.querySelector('.about-section .left-column h1');
+        const aboutSubtitle = document.querySelector('.about-section .left-column h2');
+        const aboutDesc = document.querySelector('.about-section .right-column p');
+        const aboutPoints = document.querySelector('.about-section .right-column ul');
+
+        // We use 'ABOUT' as default if no title is set for home's about section
+        // Or if we want to keep it static, we can. But making it dynamic is better.
+        // Actually, for the home page, the 'title' usually goes to the hero.
+        // So we might want to keep "ABOUT" static or use a specific extra_data field.
+        // Let's assume title = Hero Title, subtitle = Hero Tagline, description = About Desc.
+        
+        if (page.description) aboutDesc.textContent = page.description;
+        
+        if (page.extra_data && page.extra_data.points) {
+          aboutPoints.innerHTML = '';
+          page.extra_data.points.forEach(point => {
+            const li = document.createElement('li');
+            li.textContent = point;
+            aboutPoints.appendChild(li);
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error loading home content:', error);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadHomeContent);
+  </script>
+
   <!-- Floating Rotating Button -->
   <a href="https://link.ieee.ceal.in/ExecomCall" class="floating-button-container">
     <div class="rotating-text-wrapper">

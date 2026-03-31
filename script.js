@@ -210,9 +210,14 @@ async function hydratePage() {
     pageName = 'about';
   } else if (path.includes('/events/')) {
     pageName = 'events';
+  } else if (path.includes('/gallery/')) {
+    pageName = 'gallery';
   } else if (path.includes('/societies/')) {
-    // Handling society pages is different (done in members.js or similar)
-    return;
+    pageName = 'societies';
+  } else if (path.includes('/contact/')) {
+    pageName = 'contact';
+  } else if (path.includes('/resources/')) {
+    pageName = 'resources';
   }
   
   try {
@@ -222,10 +227,14 @@ async function hydratePage() {
     if (data.status === 'success' && data.page) {
       const page = data.page;
       
-      // Update Hero Section
-      const landingPage = document.querySelector('.landing-page');
-      const landingTitle = document.querySelector('.landing-content h1');
-      const landingSubtitle = document.querySelector('.landing-content p');
+      // 1. Update Hero Section (Common across many pages)
+      const landingPage = document.querySelector('.landing-page') || document.querySelector('.societies-hero');
+      const landingTitle = document.querySelector('#page-title') || 
+                           document.querySelector('.landing-content h1') || 
+                           document.querySelector('.hero-content h1');
+      const landingSubtitle = document.querySelector('#page-subtitle') || 
+                              document.querySelector('.landing-content p') || 
+                              document.querySelector('.hero-content p');
       
       if (page.main_image_url && landingPage) {
         landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
@@ -233,7 +242,7 @@ async function hydratePage() {
       if (page.title && landingTitle) landingTitle.innerText = page.title;
       if (page.subtitle && landingSubtitle) landingSubtitle.innerText = page.subtitle;
       
-      // Update About Section
+      // 2. Update About Section (Specific to Home/About)
       const aboutSection = document.querySelector('.about-section');
       if (aboutSection) {
         const aboutTitle = aboutSection.querySelector('.left-column h1');
@@ -241,12 +250,11 @@ async function hydratePage() {
         const aboutDescription = aboutSection.querySelector('.right-column p');
         const aboutPointsList = aboutSection.querySelector('.right-column ul');
         
-        // Use specific fields or description depending on the page
         if (pageName === 'home') {
-           // On home page, maybe description is the "About" text
+           // On home page, we might use the description for the about section
            if (page.description && aboutDescription) aboutDescription.innerText = page.description;
         } else {
-           // On about page
+           // On about page, we update everything from the API
            if (page.title && aboutTitle) aboutTitle.innerText = page.title;
            if (page.subtitle && aboutSubtitle) aboutSubtitle.innerText = page.subtitle;
            if (page.description && aboutDescription) aboutDescription.innerText = page.description;
@@ -256,6 +264,20 @@ async function hydratePage() {
         if (page.extra_data && page.extra_data.points && Array.isArray(page.extra_data.points) && aboutPointsList) {
           aboutPointsList.innerHTML = page.extra_data.points.map(point => `<li>${point}</li>`).join('');
         }
+      }
+
+      // 3. Update Gallery/Events specific headers if they exist
+      const galleryHeader = document.querySelector('.gallery-header');
+      if (galleryHeader && pageName === 'gallery') {
+          const ghTitle = galleryHeader.querySelector('h1');
+          const ghSub = galleryHeader.querySelector('p');
+          if (page.title && ghTitle) ghTitle.innerText = page.title;
+          if (page.subtitle && ghSub) ghSub.innerText = page.subtitle;
+      }
+
+      const socTitle = document.querySelector('.section-title');
+      if (socTitle && pageName === 'societies') {
+          if (page.title) socTitle.innerText = page.title;
       }
     }
   } catch (error) {

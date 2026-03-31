@@ -23,30 +23,52 @@
     <!-- About Section -->
     <section class="about-section">
         <div class="left-column">
-            <h1>ABOUT</h1>
-            <h2>IEEE CEAL Student Branch</h2>
+            <h1 id="about-title">ABOUT</h1>
+            <h2 id="about-subtitle">IEEE CEAL Student Branch</h2>
         </div>
         <div class="right-column">
-            <p>
-                The IEEE Student Branch at College of Engineering Attingal (CEAL) is a dynamic community of students
-                passionate
-                about technology, innovation, and collaboration. Affiliated with the world's largest technical professional
-                organization, our branch provides a platform for aspiring engineers to explore emerging fields in
-                electrical,
-                electronics, and computer sciences through hands-on projects, workshops, and technical events.
+            <p id="about-description">
+                Loading description...
             </p>
-            <ul>
-                <li>Active since 2018 with 100+ student members across various disciplines.</li>
-                <li>Recognized for organizing impactful events like the Student Development Program and TechTalk series.
-                </li>
-                <li>Strong presence in IEEE Kerala Section with participation in flagship events like IEEE LINK and All
-                    Kerala
-                    SB Congress.</li>
-                <li>Collaborations with societies such as IEEE Computer Society, PES, and WIE Affinity Group.</li>
-                <li>Focus on technical growth, community service, and professional networking for students.</li>
+            <ul id="about-points">
+                <!-- Points will be injected here -->
             </ul>
         </div>
     </section>
+
+    <script>
+    async function loadAboutContent() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/pages/about/`);
+            const data = await response.json();
+            if (data.status === 'success') {
+                const page = data.page;
+                document.getElementById('about-title').textContent = page.title || 'ABOUT';
+                document.getElementById('about-subtitle').textContent = page.subtitle || '';
+                document.getElementById('about-description').textContent = page.description || '';
+                
+                const pointsList = document.getElementById('about-points');
+                pointsList.innerHTML = '';
+                if (page.extra_data && page.extra_data.points) {
+                    page.extra_data.points.forEach(point => {
+                        const li = document.createElement('li');
+                        li.textContent = point;
+                        pointsList.appendChild(li);
+                    });
+                }
+                
+                // Update Page Title
+                if (page.title) {
+                    document.title = `${page.title} - IEEE CEAL`;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading about content:', error);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadAboutContent);
+    </script>
 
     <!-- Logo Bar -->
     <div class="bg-gray-100 py-6 px-4">
@@ -75,6 +97,7 @@
     <!-- Footer -->
     <div id="Footer"></div>
 
+    <script src="/config.js"></script>
     <script src="/script.js"></script>
     
     <!-- loader.js loads the navbar and footer dynamically -->
