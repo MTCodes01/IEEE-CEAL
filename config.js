@@ -46,7 +46,7 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
         } else {
             // Main Page logic
             
-            // Societies count
+            // Societies count (Mapped to 'projects' label in stats counters)
             if (configObj.projects) {
                 try {
                     const socRes = await fetch(`${apiBaseUrl}/societies/`);
@@ -54,6 +54,8 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                         const data = await socRes.json();
                         let societies = data.societies || data.data || data;
                         if (Array.isArray(societies)) {
+                            // Filter out "Professional Execom" (id 1) and "IEEE SB CEAL" (id 2)
+                            // to count only the specific technical societies/chapters
                             societies = societies.filter(soc => soc.id !== 1 && soc.id !== 2);
                             configObj.projects.endValue = societies.length;
                         }
