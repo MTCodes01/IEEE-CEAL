@@ -21,13 +21,13 @@
     <div id="NavBar"></div>
 
     <!-- About Section -->
-    <section class="about-section">
+    <section class="about-section landing-page-about">
         <div class="left-column">
-            <h1 id="about-title">ABOUT</h1>
-            <h2 id="about-subtitle">IEEE CEAL Student Branch</h2>
+            <h1 id="page-title">ABOUT</h1>
+            <h2 id="page-subtitle">IEEE CEAL Student Branch</h2>
         </div>
         <div class="right-column">
-            <p id="about-description">
+            <p id="page-description">
                 Loading description...
             </p>
             <ul id="about-points">
@@ -37,37 +37,25 @@
     </section>
 
     <script>
-    async function loadAboutContent() {
+    async function initAbout() {
+        await window.loadPageHeader('about');
+        
+        // Handle custom points for about page
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}/pages/about/`);
             const data = await response.json();
-            if (data.status === 'success') {
-                const page = data.page;
-                document.getElementById('about-title').textContent = page.title || 'ABOUT';
-                document.getElementById('about-subtitle').textContent = page.subtitle || '';
-                document.getElementById('about-description').textContent = page.description || '';
-                
+            if (data.status === 'success' && data.page && data.page.extra_data && data.page.extra_data.points) {
                 const pointsList = document.getElementById('about-points');
                 pointsList.innerHTML = '';
-                if (page.extra_data && page.extra_data.points) {
-                    page.extra_data.points.forEach(point => {
-                        const li = document.createElement('li');
-                        li.textContent = point;
-                        pointsList.appendChild(li);
-                    });
-                }
-                
-                // Update Page Title
-                if (page.title) {
-                    document.title = `${page.title} - IEEE CEAL`;
-                }
+                data.page.extra_data.points.forEach(point => {
+                    const li = document.createElement('li');
+                    li.textContent = point;
+                    pointsList.appendChild(li);
+                });
             }
-        } catch (error) {
-            console.error('Error loading about content:', error);
-        }
+        } catch (e) { console.error("About points load failed", e); }
     }
-    
-    document.addEventListener('DOMContentLoaded', loadAboutContent);
+    document.addEventListener('DOMContentLoaded', initAbout);
     </script>
 
     <!-- Logo Bar -->

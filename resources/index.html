@@ -252,7 +252,7 @@
 <body>
     <div id="NavBar"></div>
 
-    <section class="resources-hero">
+    <section class="resources-hero landing-page-resources">
         <div class="max-w-4xl mx-auto px-4">
             <h1 id="page-title" class="text-4xl md:text-5xl font-extrabold mb-4">Member Resources</h1>
             <p id="page-subtitle" class="text-xl opacity-90 max-w-2xl mx-auto">Discover essential technical content, professional development tools, and member-exclusive benefits.</p>
@@ -378,7 +378,10 @@
             renderResources();
         }
 
-        document.addEventListener('DOMContentLoaded', loadResources);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadResources();
+            window.loadPageHeader('resources');
+        });
     </script>
     <script src="/loader.js"></script>
 </body>

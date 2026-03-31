@@ -182,4 +182,51 @@ document.addEventListener("DOMContentLoaded", () => {
         yearSpan.textContent = new Date().getFullYear();
       }
     });
+
+  /**
+   * Dynamically loads page header content (Title, Subtitle, Banner) from the backend.
+   * @param {string} pageName - The identifier for the page (e.g., 'home', 'events', 'execom').
+   */
+  window.loadPageHeader = async function (pageName) {
+    const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '/api';
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/pages/${pageName}/`);
+      if (!response.ok) return;
+      const data = await response.json();
+
+      if (data.status === 'success' && data.page) {
+        const page = data.page;
+
+        // Update Title
+        const titleEl = document.getElementById('page-title') || document.getElementById('ExecomMainText');
+        if (titleEl && page.title) titleEl.textContent = page.title;
+
+        // Update Subtitle
+        const subtitleEl = document.getElementById('page-subtitle');
+        if (subtitleEl && page.subtitle) subtitleEl.textContent = page.subtitle;
+
+        // Update Banner Image
+        if (page.main_image_url) {
+          const landingPage = document.querySelector('.landing-page') ||
+            document.querySelector('.landing-page-execom') ||
+            document.querySelector('.landing-page-about') ||
+            document.querySelector('.landing-page-gallery') ||
+            document.querySelector('.landing-page-resources');
+
+          if (landingPage) {
+            landingPage.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('${page.main_image_url}')`;
+            landingPage.style.backgroundSize = 'cover';
+            landingPage.style.backgroundPosition = 'center';
+          }
+        }
+
+        // Update Description (if applicable)
+        const descEl = document.getElementById('page-description') || document.getElementById('AboutDescriptionText');
+        if (descEl && page.description) descEl.innerHTML = page.description.replace(/\n/g, '<br>');
+      }
+    } catch (error) {
+      console.error(`Error loading header for ${pageName}:`, error);
+    }
+  };
 });

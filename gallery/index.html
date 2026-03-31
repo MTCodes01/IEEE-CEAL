@@ -377,9 +377,10 @@
     <!-- Nav bar -->
     <div id="NavBar"></div>
 
-    <div class="landing-page">
+    <div class="landing-page landing-page-gallery">
         <div class="landing-content">
-            <h1>Gallery</h1>
+            <h1 id="page-title">Gallery</h1>
+            <p id="page-subtitle"></p>
             <a href="#gallery-content" class="explore-btn">Explore Gallery</a>
         </div>
     </div>
@@ -761,6 +762,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             fetchYears();
             fetchGalleryImages(); // No args, fetches all
+            window.loadPageHeader('gallery');
         });
     </script>
 </body>
