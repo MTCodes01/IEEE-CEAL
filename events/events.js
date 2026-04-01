@@ -27,6 +27,20 @@ async function fetchYears() {
         }
     } catch (error) {
         console.error('Error fetching years:', error);
+        if (window.FALLBACK_DATA && window.FALLBACK_DATA.execomYears) {
+            const yearContainer = document.getElementById('year-filters');
+            const allYearsChip = yearContainer.firstElementChild;
+            yearContainer.innerHTML = '';
+            yearContainer.appendChild(allYearsChip);
+
+            window.FALLBACK_DATA.execomYears.forEach(year => {
+                const chip = document.createElement('div');
+                chip.className = 'year-chip';
+                chip.textContent = year;
+                chip.onclick = () => filterByYear(year, chip);
+                yearContainer.appendChild(chip);
+            });
+        }
     }
 }
 
@@ -49,7 +63,13 @@ async function fetchEvents() {
         }
     } catch (error) {
         console.error('Error fetching events:', error);
-        loadingState.innerHTML = '<div class="text-red-400">Failed to load events.</div>';
+        if (window.FALLBACK_DATA && window.FALLBACK_DATA.events) {
+            allEvents = window.FALLBACK_DATA.events;
+            allEvents.sort((a, b) => new Date(b.dateandtime) - new Date(a.dateandtime));
+            applyFilters();
+        } else {
+            loadingState.innerHTML = '<div class="text-red-400">Failed to load events.</div>';
+        }
     }
 }
 

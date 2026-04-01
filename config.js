@@ -2,6 +2,64 @@ const CONFIG = {
     API_BASE_URL: 'http://127.0.0.1:8000/api'
 };
 
+window.FALLBACK_DATA = {
+    stats: {
+        years: 6,
+        members: 125,
+        projects: 8,
+        events: 42
+    },
+    execomYears: [2024, 2023, 2022],
+    execom: {
+        heading: {
+            Society: {
+                "Professional Execom": [
+                    { id: 1, Name: "Dr. Placeholder", role: "Branch Counselor", email: "counselor@example.com", photo_url: "https://placehold.co/400?text=Counselor" }
+                ],
+                "IEEE SB CEAL": [
+                    { id: 2, Name: "John Doe", role: "Chair", email: "chair@example.com", photo_url: "https://placehold.co/400?text=Chair" },
+                    { id: 3, Name: "Jane Smith", role: "Vice Chair", email: "vicechair@example.com", photo_url: "https://placehold.co/400?text=Vice+Chair" }
+                ]
+            }
+        }
+    },
+    events: [
+        {
+            id: 1,
+            name: "Annual Hackathon",
+            details: "Join us for 24 hours of coding and innovation.",
+            dateandtime: "2024-08-15T10:00:00Z",
+            clubs: ["Computer Society"],
+            image_name: "https://placehold.co/600x400?text=Hackathon",
+            link: "#"
+        },
+        {
+            id: 2,
+            name: "Robotics Workshop",
+            details: "Hands-on session with microcontrollers.",
+            dateandtime: "2024-09-20T09:00:00Z",
+            clubs: ["RAS"],
+            image_name: "https://placehold.co/600x400?text=Robotics",
+            link: "#"
+        }
+    ],
+    societies: [
+        { id: 1, name: "Professional Execom" },
+        { id: 2, name: "IEEE SB CEAL" },
+        { id: 3, name: "CS" },
+        { id: 4, name: "RAS" },
+        { id: 5, name: "WIE" },
+        { id: 6, name: "PES" },
+        { id: 7, name: "PELS" },
+        { id: 8, name: "IAS" },
+        { id: 9, name: "SPS" },
+        { id: 10, name: "EMBS" }
+    ],
+    societyInfo: {
+        counts: { total_members: 12, total_events: 5 }
+    }
+};
+
 // Global helper to fetch and calculate stats dynamically for index.html and society pages
 window.fetchDynamicStats = async function(configObj, isMainPage = false, societyName = null) {
     try {
@@ -15,8 +73,11 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                 const data = await yearsRes.json();
                 allyears = data.allyears || [];
                 if (configObj.years) configObj.years.endValue = allyears.length;
-            }
-        } catch (e) { console.error("Could not fetch years:", e); }
+            } else throw Error("Not OK");
+        } catch (e) {
+            console.error("Could not fetch years:", e);
+            if (configObj.years) configObj.years.endValue = window.FALLBACK_DATA.stats.years;
+        }
 
         if (!isMainPage && societyName) {
             // Fetch precise society stats directly from the society endpoint using ID
@@ -38,11 +99,15 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                                     if (configObj.events) configObj.events.endValue = data.counts.total_events || 0;
                                     // Projects remains empty (or 0) unless added to API
                                 }
-                            }
+                            } else throw Error("Not OK");
                         }
                     }
-                }
-            } catch(e) { console.error("Could not fetch society stats:", e); }
+                } else throw Error("Not OK");
+            } catch(e) {
+                console.error("Could not fetch society stats:", e);
+                if (configObj.members) configObj.members.endValue = window.FALLBACK_DATA.societyInfo.counts.total_members;
+                if (configObj.events) configObj.events.endValue = window.FALLBACK_DATA.societyInfo.counts.total_events;
+            }
         } else {
             // Main Page logic
             
@@ -59,8 +124,11 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                             societies = societies.filter(soc => soc.id !== 1 && soc.id !== 2);
                             configObj.projects.endValue = societies.length;
                         }
-                    }
-                } catch (e) { console.error("Could not fetch societies list:", e); }
+                    } else throw Error("Not OK");
+                } catch (e) {
+                    console.error("Could not fetch societies list:", e);
+                    if (configObj.projects) configObj.projects.endValue = window.FALLBACK_DATA.stats.projects;
+                }
             }
 
             // Events count
@@ -70,24 +138,34 @@ window.fetchDynamicStats = async function(configObj, isMainPage = false, society
                     if (eventsRes.ok) {
                         const data = await eventsRes.json();
                         if (data.events) configObj.events.endValue = data.events.length;
-                    }
-                } catch (e) { console.error("Could not fetch events:", e); }
+                    } else throw Error("Not OK");
+                } catch (e) {
+                    console.error("Could not fetch events:", e);
+                    if (configObj.events) configObj.events.endValue = window.FALLBACK_DATA.stats.events;
+                }
             }
 
             // Members from overall latest execom
-            if (configObj.members && allyears.length > 0) {
-                try {
-                    const latestYear = allyears.sort((a,b) => b-a)[0];
-                    const execomRes = await fetch(`${apiBaseUrl}/GetExecomDataByYear/${latestYear}/`);
-                    if (execomRes.ok) {
-                        const data = await execomRes.json();
-                        if (data.status !== 'error' && data.heading && data.heading.Society) {
-                            let total = 0;
-                            Object.values(data.heading.Society).forEach(arr => total += arr.length);
-                            if (total > 0) configObj.members.endValue = total;
-                        }
+            if (configObj.members) {
+                if (allyears.length > 0) {
+                    try {
+                        const latestYear = allyears.sort((a,b) => b-a)[0];
+                        const execomRes = await fetch(`${apiBaseUrl}/GetExecomDataByYear/${latestYear}/`);
+                        if (execomRes.ok) {
+                            const data = await execomRes.json();
+                            if (data.status !== 'error' && data.heading && data.heading.Society) {
+                                let total = 0;
+                                Object.values(data.heading.Society).forEach(arr => total += arr.length);
+                                if (total > 0) configObj.members.endValue = total;
+                            }
+                        } else throw Error("Not OK");
+                    } catch (e) {
+                        console.error("Could not fetch main execom members:", e);
+                        configObj.members.endValue = window.FALLBACK_DATA.stats.members;
                     }
-                } catch (e) { console.error("Could not fetch main execom members:", e); }
+                } else {
+                    configObj.members.endValue = window.FALLBACK_DATA.stats.members;
+                }
             }
 
             // --- Apply Manual Overrides for Home Page ---

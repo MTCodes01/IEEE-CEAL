@@ -13,10 +13,10 @@ async function fetchAvailableYears() {
             // Sort years in descending order
             return response.allyears.sort((a, b) => b - a);
         }
-        return [];
+        return window.FALLBACK_DATA && window.FALLBACK_DATA.execomYears ? window.FALLBACK_DATA.execomYears : [];
     } catch (error) {
         console.error('Error fetching available years:', error);
-        return [];
+        return window.FALLBACK_DATA && window.FALLBACK_DATA.execomYears ? window.FALLBACK_DATA.execomYears : [];
     }
 }
 
@@ -49,17 +49,28 @@ async function fetchPeopleByYear(requestedYear) {
                     societies = response.heading.Society;
                     yearToTry = requestedYear;
                     foundData = true;
-                } else {
-                    // No data for this year, but show the year anyway
-                    document.getElementById('ExecomMainText').innerHTML = `IEEE CEAL ${requestedYear} EXECOM`;
-                    showEmptyState(`No execom data available for year ${requestedYear}.`);
-                    return;
+                    // No data for this year, check fallback
+                    if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
+                        societies = window.FALLBACK_DATA.execom.heading.Society;
+                        yearToTry = requestedYear;
+                        foundData = true;
+                    } else {
+                        document.getElementById('ExecomMainText').innerHTML = `IEEE CEAL ${requestedYear} EXECOM`;
+                        showEmptyState(`No execom data available for year ${requestedYear}.`);
+                        return;
+                    }
                 }
             } catch (error) {
                 console.error(`Error fetching data for year ${requestedYear}:`, error);
-                document.getElementById('ExecomMainText').innerHTML = `IEEE CEAL ${requestedYear} EXECOM`;
-                showEmptyState(`Failed to load execom data for year ${requestedYear}.`);
-                return;
+                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
+                    societies = window.FALLBACK_DATA.execom.heading.Society;
+                    yearToTry = requestedYear;
+                    foundData = true;
+                } else {
+                    document.getElementById('ExecomMainText').innerHTML = `IEEE CEAL ${requestedYear} EXECOM`;
+                    showEmptyState(`Failed to load execom data for year ${requestedYear}.`);
+                    return;
+                }
             }
         } else {
             // No explicit year selection - use fallback logic to find latest year with data
@@ -87,9 +98,15 @@ async function fetchPeopleByYear(requestedYear) {
                 }
             }
 
-            if (!foundData || !societies || societies.length === 0) {
-                showEmptyState('No execom data available for any year. Please check back later.');
-                return;
+            if (!foundData || !societies || Object.keys(societies).length === 0) {
+                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
+                    societies = window.FALLBACK_DATA.execom.heading.Society;
+                    yearToTry = availableYears.length > 0 ? availableYears[0] : requestedYear;
+                    foundData = true;
+                } else {
+                    showEmptyState('No execom data available for any year. Please check back later.');
+                    return;
+                }
             }
         }
 

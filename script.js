@@ -202,6 +202,22 @@ function AnimateLogoBar() {
   }, startDelay);
 }
 
+function initMarquee() {
+  const content = document.querySelector('.marquee-content');
+  if (!content) return;
+
+  const unit = content.querySelector('.marquee-text');
+  if (!unit) return;
+
+  // Clone the unit 5 times to ensure enough content to fill any screen
+  // (Total 6 units: original + 5 clones)
+  // 6 is an even number, which works perfectly with the -50% CSS translation
+  for (let i = 0; i < 5; i++) {
+    const clone = unit.cloneNode(true);
+    content.appendChild(clone);
+  }
+}
+
 async function hydratePage() {
   const path = window.location.pathname;
   let pageName = 'home';
@@ -295,6 +311,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize the logo bar animation
   setupIntersectionObserver("#LogoBar", AnimateLogoBar, { threshold: 0.1, once: true });
 
+  // Initialize dynamic marquee
+  initMarquee();
+
   // Fetch and display people by roles
   // FetchPeopleByRoles();
-});
+});

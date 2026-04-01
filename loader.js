@@ -122,14 +122,16 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         } catch (error) {
           console.error('Error loading Execom years:', error);
-          // Fallback: add current year if API fails
-          const currentYear = new Date().getFullYear();
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = `/execom/?year=${currentYear}`;
-          a.textContent = `Execom ${currentYear}`;
-          li.appendChild(a);
-          dropdown.appendChild(li);
+          // Fallback: add fallback years if API fails
+          const fallbackYears = window.FALLBACK_DATA ? window.FALLBACK_DATA.execomYears : [new Date().getFullYear()];
+          fallbackYears.forEach(year => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `/execom/?year=${year}`;
+            a.textContent = `Execom ${year}`;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+          });
         }
       })();
 
@@ -165,8 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
             dropdown.appendChild(li);
           });
         } catch (err) {
-          console.warn('Societies dropdown: API unavailable, keeping static links.', err);
-          // Static links already in the HTML — nothing to do
+          console.warn('Societies dropdown: API unavailable, using fallback data.', err);
+          if (window.FALLBACK_DATA && window.FALLBACK_DATA.societies) {
+             let societies = window.FALLBACK_DATA.societies.filter(soc => soc.id !== 1 && soc.id !== 2);
+             dropdown.innerHTML = '';
+             societies.forEach(soc => {
+               const li = document.createElement('li');
+               const a = document.createElement('a');
+               a.href = `/societies/${soc.name}/`;
+               a.textContent = soc.full_name || soc.name;
+               li.appendChild(a);
+               dropdown.appendChild(li);
+             });
+          }
         }
       })();
     });
@@ -215,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector('.landing-page-resources');
 
           if (landingPage) {
-            landingPage.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('${page.main_image_url}')`;
+            landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
             landingPage.style.backgroundSize = 'cover';
             landingPage.style.backgroundPosition = 'center';
           }

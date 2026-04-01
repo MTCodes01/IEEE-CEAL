@@ -17,10 +17,10 @@ async function fetchAvailableYears() {
         if (response.allyears && Array.isArray(response.allyears)) {
             return response.allyears.sort((a, b) => b - a);
         }
-        return [];
+        return window.FALLBACK_DATA && window.FALLBACK_DATA.execomYears ? window.FALLBACK_DATA.execomYears : [];
     } catch (error) {
         console.error('Error fetching available years:', error);
-        return [];
+        return window.FALLBACK_DATA && window.FALLBACK_DATA.execomYears ? window.FALLBACK_DATA.execomYears : [];
     }
 }
 
@@ -55,15 +55,26 @@ async function fetchPeopleBySociety(society, requestedYear) {
                     societyMembers = response.heading.Society[society];
                     yearToTry = requestedYear;
                     foundData = true;
-                } else {
                     // No data for this society in this year
-                    showEmptyState(`No ${society} execom data available for year ${requestedYear}.`);
-                    return;
+                    if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society && window.FALLBACK_DATA.execom.heading.Society[society]) {
+                        societyMembers = window.FALLBACK_DATA.execom.heading.Society[society];
+                        yearToTry = requestedYear;
+                        foundData = true;
+                    } else {
+                        showEmptyState(`No ${society} execom data available for year ${requestedYear}.`);
+                        return;
+                    }
                 }
             } catch (error) {
                 console.error(`Error fetching data for year ${requestedYear}:`, error);
-                showEmptyState(`Failed to load ${society} execom data for year ${requestedYear}.`);
-                return;
+                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society && window.FALLBACK_DATA.execom.heading.Society[society]) {
+                    societyMembers = window.FALLBACK_DATA.execom.heading.Society[society];
+                    yearToTry = requestedYear;
+                    foundData = true;
+                } else {
+                    showEmptyState(`Failed to load ${society} execom data for year ${requestedYear}.`);
+                    return;
+                }
             }
         } else {
             // No explicit year selection - use fallback logic to find latest year with data
@@ -89,8 +100,14 @@ async function fetchPeopleBySociety(society, requestedYear) {
             }
 
             if (!foundData || !societyMembers || societyMembers.length === 0) {
-                showEmptyState(`No ${society} execom data available for any year. Please check back later.`);
-                return;
+                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society && window.FALLBACK_DATA.execom.heading.Society[society]) {
+                    societyMembers = window.FALLBACK_DATA.execom.heading.Society[society];
+                    yearToTry = availableYears.length > 0 ? availableYears[0] : requestedYear;
+                    foundData = true;
+                } else {
+                    showEmptyState(`No ${society} execom data available for any year. Please check back later.`);
+                    return;
+                }
             }
         }
 
@@ -126,11 +143,22 @@ async function fetchSocietyInfo(societyName) {
                 
                 if (dataDetail.status === 'success' && dataDetail.society) {
                     hydrateSocietyUI(dataDetail.society);
-                }
-            }
-        }
+                } else throw Error("Not OK");
+            } else throw Error("Not OK");
+        } else throw Error("Not OK");
     } catch (error) {
         console.warn('Error fetching society detail:', error);
+        if (window.FALLBACK_DATA && window.FALLBACK_DATA.societies) {
+            const socObj = window.FALLBACK_DATA.societies.find(s => s.name === societyName || s.full_name === societyName);
+            if (socObj) {
+                hydrateSocietyUI({
+                    name: socObj.name,
+                    full_name: socObj.full_name || socObj.name,
+                    description: "Details currently unavailable mode. Showing generic offline layout.",
+                    features: ["Network offline. Displaying fallback data."]
+                });
+            }
+        }
     }
 }
 
