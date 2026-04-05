@@ -49,7 +49,8 @@ async function fetchPeopleByYear(requestedYear) {
                     societies = response.heading.Society;
                     yearToTry = requestedYear;
                     foundData = true;
-                    // No data for this year, check fallback
+                } else {
+                    // No valid data for this year, try fallback
                     if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
                         societies = window.FALLBACK_DATA.execom.heading.Society;
                         yearToTry = requestedYear;
