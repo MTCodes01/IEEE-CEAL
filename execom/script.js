@@ -34,9 +34,18 @@ async function fetchPeopleByYear(requestedYear) {
             return;
         }
 
-        let yearToTry = requestedYear;
-        let foundData = false;
-        let societies = null;
+        // Helper to check for matching year in fallback data
+        const getFallbackForYear = (year) => {
+            if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
+                const fallbackSoc = window.FALLBACK_DATA.execom.heading.Society;
+                // Check if any member in any society matches the requested year
+                const hasMatchingYear = Object.values(fallbackSoc).some(members => 
+                    members.some(m => m.year == year)
+                );
+                if (hasMatchingYear) return fallbackSoc;
+            }
+            return null;
+        };
 
         // If year was explicitly selected from dropdown, only try that year
         if (explicitYearSelection) {
@@ -50,9 +59,10 @@ async function fetchPeopleByYear(requestedYear) {
                     yearToTry = requestedYear;
                     foundData = true;
                 } else {
-                    // No valid data for this year, try fallback
-                    if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
-                        societies = window.FALLBACK_DATA.execom.heading.Society;
+                    // Try fallback specifically for this year
+                    const fallback = getFallbackForYear(requestedYear);
+                    if (fallback) {
+                        societies = fallback;
                         yearToTry = requestedYear;
                         foundData = true;
                     } else {
@@ -63,8 +73,9 @@ async function fetchPeopleByYear(requestedYear) {
                 }
             } catch (error) {
                 console.error(`Error fetching data for year ${requestedYear}:`, error);
-                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
-                    societies = window.FALLBACK_DATA.execom.heading.Society;
+                const fallback = getFallbackForYear(requestedYear);
+                if (fallback) {
+                    societies = fallback;
                     yearToTry = requestedYear;
                     foundData = true;
                 } else {
@@ -92,22 +103,24 @@ async function fetchPeopleByYear(requestedYear) {
                         yearToTry = year;
                         foundData = true;
                         break;
+                    } else {
+                        // Check if fallback exists for this specific year iteration
+                        const fallback = getFallbackForYear(year);
+                        if (fallback) {
+                            societies = fallback;
+                            yearToTry = year;
+                            foundData = true;
+                            break;
+                        }
                     }
                 } catch (error) {
                     console.error(`Error fetching data for year ${year}:`, error);
-                    // Continue to next year
                 }
             }
 
             if (!foundData || !societies || Object.keys(societies).length === 0) {
-                if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society) {
-                    societies = window.FALLBACK_DATA.execom.heading.Society;
-                    yearToTry = availableYears.length > 0 ? availableYears[0] : requestedYear;
-                    foundData = true;
-                } else {
-                    showEmptyState('No execom data available for any year. Please check back later.');
-                    return;
-                }
+                showEmptyState('No execom data available for any year. Please check back later.');
+                return;
             }
         }
 
@@ -119,7 +132,11 @@ async function fetchPeopleByYear(requestedYear) {
             console.log(`Showing data for year ${yearToTry} (requested: ${requestedYear})`);
         }
 
-        CreateSocietySections(societies);
+        if (societies) {
+            CreateSocietySections(societies);
+        } else {
+            showEmptyState('No execom data found for the selected criteria.');
+        }
     } catch (error) {
         console.error('Error fetching execom data:', error);
         alert('Failed to load execom data. Please try again later.');
@@ -157,22 +174,24 @@ function CreateSocietySections(societies) {
             const card = document.createElement('div');
             card.className = 'person-card';
             
-            // Use photo_url from backend API response
-            const photoUrl = person.photo_url || `/images/execom_2025/${person.name.toLowerCase().split(' ')[0]}.png`;
+            // Safety check for person.name to prevent crash if missing
+            const fallbackName = "Member";
+            const photoPart = person.name ? person.name.toLowerCase().split(' ')[0] : fallbackName.toLowerCase();
+            const photoUrl = person.photo_url || `/images/execom_2025/${photoPart}.png`;
             
             card.innerHTML = `
-                <img class="person-photo" src="${photoUrl}" onerror="this.onerror=null; this.src='/images/execom_2025/default.png';" alt="${person.name}" />
-                <div class="person-name">${toTitleCase(person.name || '')}</div>
+                <img class="person-photo" src="${photoUrl}" onerror="this.onerror=null; this.src='/images/execom_2025/default.png';" alt="${person.name || fallbackName}" />
+                <div class="person-name">${toTitleCase(person.name || fallbackName)}</div>
                 <div class="person-society">${societyName || ''}</div>
                 <div class="person-role">${toTitleCase(person.role || '')}</div>
                 <div class="person-contact">
                     ${person.email ? `<a href="https://mail.google.com/mail/?view=cm&fs=1&to=${person.email}" target="_blank" title="Mail"><i class="fa-solid fa-envelope"></i></a>` : ''}
-                    ${person.linkedin ? `<a href="${person.linkedin}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                    ${person.instagram ? `<a href="${person.instagram}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
-                    ${person.github ? `<a href="${person.github}" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
-                    ${person.website ? `<a href="${person.website}" target="_blank" title="Website"><i class="fa-solid fa-globe"></i></a>` : ''}
-                    ${person.x ? `<a href="${person.x}" target="_blank" title="X"><i class="fab fa-x"></i></a>` : ''}
-                    ${person.facebook ? `<a href="${person.facebook}" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
+                    ${person.linkedin ? `<a href="${person.linkedin.startsWith('http') ? person.linkedin : `https://linkedin.com/in/${person.linkedin}`}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+                    ${person.instagram ? `<a href="${person.instagram.startsWith('http') ? person.instagram : `https://instagram.com/${person.instagram}`}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+                    ${person.github ? `<a href="${person.github.startsWith('http') ? person.github : `https://github.com/${person.github}`}" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+                    ${person.website ? `<a href="${person.website.startsWith('http') ? person.website : `https://${person.website}`}" target="_blank" title="Website"><i class="fa-solid fa-globe"></i></a>` : ''}
+                    ${person.x ? `<a href="${person.x.startsWith('http') ? person.x : `https://x.com/${person.x}`}" target="_blank" title="X"><i class="fab fa-x"></i></a>` : ''}
+                    ${person.facebook ? `<a href="${person.facebook.startsWith('http') ? person.facebook : `https://facebook.com/${person.facebook}`}" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
                 </div>
             `;
             societyContainer.appendChild(card);
