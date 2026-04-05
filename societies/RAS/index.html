@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,40 +8,17 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/execom/style.css">
     <link rel="stylesheet" href="/responsive.css">
-    <title>IEEE CEAL</title>
+    <title id="tab-title">IEEE CEAL Society</title>
 </head>
-
 <body>
     <!-- Nav bar -->
     <div id="NavBar"></div>
 
-    <div class="landing-page">
+    <div class="landing-page" style="background-color: var(--primary);">
         <div class="landing-content">
-            <h1>RAS</h1>
-            <p>Robotics and Automation Society</p>
-            <a href="#LogoBar" class="explore-btn">Read More</a>
-        </div>
-    </div>
-
-    <!-- Logo Bar -->
-    <div class="bg-gray-100 py-6 px-4">
-        <div id="LogoBar" class="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12 max-w-7xl mx-auto">
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-CS_logo-color.png"
-                alt="IEEE Computer Society Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-EMBS_Logo-color.png"
-                alt="IEEE EMBS Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PELS_Logo-color.png"
-                alt="IEEE PELS Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PES_Logo-color.png"
-                alt="IEEE PES Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-RAS_Logo-color.png"
-                alt="IEEE RAS Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-SPS_Logo-color.png"
-                alt="IEEE SPS Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-WIE_logo-color.png"
-                alt="IEEE WIE Logo" />
-            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-IAS_Logo-color.png"
-                alt="IEEE IAS Logo" />
+            <h1 id="page-title">Loading...</h1>
+            <p id="page-subtitle"></p>
+            <a href="#about" class="explore-btn">Read More</a>
         </div>
     </div>
 
@@ -50,58 +26,46 @@
     <section class="about-section">
         <div class="left-column">
             <h1>ABOUT</h1>
-            <h2>IEEE Robotics and Automation Society (RAS)</h2>
+            <h2 id="society-full-name">Society Details</h2>
         </div>
         <div class="right-column">
-            <img src="/logos/color/IEEE-RAS_Logo-color.png" width="300vw" alt="IEEE RAS Logo" class="society-logo">
-            <p class="fst-italic">
-                The IEEE Robotics and Automation Society (RAS) functions as a professional society within the IEEE
-                community. RAS is committed to enhancing both the theoretical and practical aspects of robotics and
-                automation engineering. As one of the IEEE's largest and most vibrant societies, RAS is critical to
-                facilitating knowledge exchange and collaboration among academics, engineers, and professionals in this
-                field. Its purpose is to encourage technological developments, support research dissemination, and push
-                innovation in robotics and automation.
+            <img src="" alt="Society Logo" class="society-logo" id="about-society-logo">
+            <p id="society-description">
+                Loading description...
             </p>
-            <li>2nd Largest SBC in IEEE Kerala Section.</li>
-            <li>Largest Power and Energy Society Chapter Globally Membership-wise
-            </li>
-            <li> selected to PES Region 10 SCC. </li>
+            <ul id="society-features"></ul>
         </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="stats flex flex-col sm:flex-row items-center py-8">
-        <div class="stat-box text-center">
-            <h3 class="years text-3xl font-bold">0</h3>
-            <p class="text-lg">Years</p>
+    <section class="stats">
+        <div class="stat-box">
+            <h3 class="years">0</h3>
+            <p>Years</p>
         </div>
-        <div class="stat-box text-center">
-            <h3 class="members text-3xl font-bold">0</h3>
-            <p class="text-lg">Members</p>
+        <div class="stat-box">
+            <h3 class="members">0</h3>
+            <p>Members</p>
         </div>
-        <div class="stat-box text-center">
-            <h3 class="projects text-3xl font-bold">0</h3>
-            <p class="text-lg">Projects</p>
+        <div class="stat-box">
+            <h3 class="projects">0</h3>
+            <p>Projects</p>
         </div>
-        <div class="stat-box text-center">
-            <h3 class="events text-3xl font-bold">0</h3>
-            <p class="text-lg">Events</p>
+        <div class="stat-box">
+            <h3 class="events">0</h3>
+            <p>Events</p>
         </div>
     </section>
 
-    <section id="team"></section>
-
-    <!-- Add more sections here -->
+    <!-- Team Section (Hydrated by members.js) -->
+    <section id="team" style="padding-top: 60px; min-height: 400px;"></section>
 
     <!-- Footer -->
     <div id="Footer"></div>
 
     <script src="/config.js"></script>
-    <script src="./script.js"></script>
+    <script src="../society.js"></script>
     <script src="../members.js"></script>
-
-    <!-- loader.js loads the navbar and footer dynamically -->
     <script src="/loader.js"></script>
 </body>
-
 </html>

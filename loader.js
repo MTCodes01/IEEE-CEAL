@@ -194,6 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
       }
+    })
+    .catch(err => {
+      console.warn("Footer load failed, using basic fallback.");
+      const footerEl = document.getElementById("Footer");
+      if (footerEl) {
+        footerEl.innerHTML = `<footer style="text-align:center; padding: 20px; background: #f8f9fa;">&copy; ${new Date().getFullYear()} IEEE Student Branch CEAL</footer>`;
+      }
     });
 
   /**
@@ -203,20 +210,13 @@ document.addEventListener("DOMContentLoaded", () => {
   window.loadPageHeader = async function (pageName) {
     const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '/api';
 
-    try {
-      const response = await fetch(`${apiBaseUrl}/pages/${pageName}/`);
-      if (!response.ok) return;
-      const data = await response.json();
-
-      if (data.status === 'success' && data.page) {
-        const page = data.page;
-
+    function applyHeaderData(page) {
         // Update Title
-        const titleEl = document.getElementById('page-title') || document.getElementById('ExecomMainText');
+        const titleEl = document.getElementById('page-title') || document.getElementById('ExecomMainText') || document.querySelector('.landing-content h1');
         if (titleEl && page.title) titleEl.textContent = page.title;
 
         // Update Subtitle
-        const subtitleEl = document.getElementById('page-subtitle');
+        const subtitleEl = document.getElementById('page-subtitle') || document.querySelector('.landing-content p');
         if (subtitleEl && page.subtitle) subtitleEl.textContent = page.subtitle;
 
         // Update Banner Image
@@ -225,7 +225,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector('.landing-page-execom') ||
             document.querySelector('.landing-page-about') ||
             document.querySelector('.landing-page-gallery') ||
-            document.querySelector('.landing-page-resources');
+            document.querySelector('.landing-page-resources') ||
+            document.querySelector('.landing-events');
 
           if (landingPage) {
             landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
@@ -235,11 +236,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Update Description (if applicable)
-        const descEl = document.getElementById('page-description') || document.getElementById('AboutDescriptionText');
+        const descEl = document.getElementById('page-description') || document.getElementById('AboutDescriptionText') || document.querySelector('.about-text p');
         if (descEl && page.description) descEl.innerHTML = page.description.replace(/\n/g, '<br>');
+    }
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/pages/${pageName}/`);
+      if (!response.ok) throw new Error("API request failed with status " + response.status);
+      const data = await response.json();
+
+      if (data.status === 'success' && data.page) {
+        applyHeaderData(data.page);
+        return; // Success
+      } else {
+        throw new Error("Invalid API response data");
       }
     } catch (error) {
-      console.error(`Error loading header for ${pageName}:`, error);
+      console.warn(`Error loading header for ${pageName}, falling back to static config:`, error);
+      if (window.FALLBACK_DATA && window.FALLBACK_DATA.pages && window.FALLBACK_DATA.pages[pageName]) {
+          applyHeaderData(window.FALLBACK_DATA.pages[pageName]);
+      }
     }
   };
 });

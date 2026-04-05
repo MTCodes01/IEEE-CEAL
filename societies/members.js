@@ -122,7 +122,12 @@ async function fetchPeopleBySociety(society, requestedYear) {
         CreateSocietySections({ [society]: societyMembers });
     } catch (error) {
         console.error('Error fetching society data:', error);
-        showEmptyState('Failed to load society data. Please try again later.');
+        if (window.FALLBACK_DATA && window.FALLBACK_DATA.execom && window.FALLBACK_DATA.execom.heading && window.FALLBACK_DATA.execom.heading.Society && window.FALLBACK_DATA.execom.heading.Society[society]) {
+            console.warn('Backend unavailable, using execom fallback');
+            CreateSocietySections({ [society]: window.FALLBACK_DATA.execom.heading.Society[society] });
+        } else {
+            showEmptyState('Failed to load society data. Please try again later.');
+        }
     }
 }
 

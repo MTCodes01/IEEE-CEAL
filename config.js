@@ -57,6 +57,15 @@ window.FALLBACK_DATA = {
     ],
     societyInfo: {
         counts: { total_members: 12, total_events: 5 }
+    },
+    pages: {
+        home: { title: "Welcome to IEEE CEAL", subtitle: "Empowering Students to Innovate and Excel", description: "Discover our vibrant community..." },
+        about: { title: "About IEEE CEAL", subtitle: "Our Mission and Vision", description: "IEEE SB CEAL is dedicated to fostering technological innovation..." },
+        societies: { title: "Our Societies", subtitle: "Explore our diverse technical chapters" },
+        events: { title: "Events & Hackathons", subtitle: "Join us in our upcoming activities" },
+        execom: { title: "Executive Committee", subtitle: "Meet the team driving the change" },
+        gallery: { title: "Gallery", subtitle: "Memories from our past events" },
+        resources: { title: "Resources", subtitle: "Study materials, standards, and guides" }
     }
 };
 

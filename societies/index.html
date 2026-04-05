@@ -285,6 +285,14 @@
     <!-- Nav bar -->
     <div id="NavBar"></div>
 
+    <!-- Dynamic Hero Section -->
+    <div class="landing-page" style="background-color: var(--primary); min-height: 55vh; display: flex; align-items: center; justify-content: center; position: relative; text-align: center;">
+        <div class="landing-content" style="position: relative; z-index: 2; padding: 0 1.5rem;">
+            <h1 id="page-title" style="font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 700; color: #fff; margin-bottom: 0.75rem; text-shadow: 0 2px 20px rgba(0,0,0,0.4);">Loading...</h1>
+            <p id="page-subtitle" style="font-size: 1.15rem; font-weight: 300; opacity: 0.9; color: #fff; max-width: 540px; margin: 0 auto;"></p>
+        </div>
+    </div>
+
     <!-- Society Grid -->
     <section class="societies-section">
         <h2 class="section-title">IEEE CEAL Societies</h2>
@@ -414,7 +422,13 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', loadSocieties);
+        // Load resources and header on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSocieties();
+            if (typeof window.loadPageHeader === 'function') {
+                window.loadPageHeader('societies');
+            }
+        });
     </script>
     <script src="/loader.js"></script>
 </body>
