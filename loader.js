@@ -207,8 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
    * Dynamically loads page header content (Title, Subtitle, Banner) from the backend.
    * @param {string} pageName - The identifier for the page (e.g., 'home', 'events', 'execom').
    */
-  window.loadPageHeader = async function (pageName) {
+  window.loadPageHeader = async function (pageName, year = null) {
     const apiBaseUrl = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '/api';
+    
+    let url = `${apiBaseUrl}/pages/${pageName}/`;
+    if (year) {
+      url += `?year=${year}`;
+    }
 
     function applyHeaderData(page) {
         // Update Title
@@ -220,19 +225,19 @@ document.addEventListener("DOMContentLoaded", () => {
         if (subtitleEl && page.subtitle) subtitleEl.textContent = page.subtitle;
 
         // Update Banner Image
-        if (page.main_image_url) {
-          const landingPage = document.querySelector('.landing-page') ||
-            document.querySelector('.landing-page-execom') ||
-            document.querySelector('.landing-page-about') ||
-            document.querySelector('.landing-page-gallery') ||
-            document.querySelector('.landing-page-resources') ||
-            document.querySelector('.landing-events');
+        const bannerUrl = page.main_image_url || 'https://img.freepik.com/free-vector/art-gallery-empty-room-with-white-walls-lamps_107791-1490.jpg?semt=ais_incoming&w=740&q=80';
+        
+        const landingPage = document.querySelector('.landing-page') ||
+          document.querySelector('.landing-page-execom') ||
+          document.querySelector('.landing-page-about') ||
+          document.querySelector('.landing-page-gallery') ||
+          document.querySelector('.landing-page-resources') ||
+          document.querySelector('.landing-events');
 
-          if (landingPage) {
-            landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
-            landingPage.style.backgroundSize = 'cover';
-            landingPage.style.backgroundPosition = 'center';
-          }
+        if (landingPage) {
+          landingPage.style.backgroundImage = `url('${bannerUrl}')`;
+          landingPage.style.backgroundSize = 'cover';
+          landingPage.style.backgroundPosition = 'center';
         }
 
         // Update Description (if applicable)
@@ -241,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`${apiBaseUrl}/pages/${pageName}/`);
+      const response = await fetch(url);
       if (!response.ok) throw new Error("API request failed with status " + response.status);
       const data = await response.json();
 

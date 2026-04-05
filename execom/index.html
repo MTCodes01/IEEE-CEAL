@@ -32,7 +32,9 @@
   <script src="../loader.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      window.loadPageHeader('execom');
+      const urlParams = new URLSearchParams(window.location.search);
+      const year = urlParams.get('year');
+      window.loadPageHeader('execom', year);
     });
   </script>
 </body>

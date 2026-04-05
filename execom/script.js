@@ -124,8 +124,11 @@ async function fetchPeopleByYear(requestedYear) {
             }
         }
 
-        // Update the page title with the actual year being displayed
-        document.getElementById('ExecomMainText').innerHTML = `IEEE CEAL ${yearToTry} EXECOM`;
+        // Update the page title with the actual year being displayed (Fallback only)
+        const titleEl = document.getElementById('ExecomMainText');
+        if (titleEl && (!titleEl.textContent || titleEl.textContent.trim() === "")) {
+            titleEl.innerHTML = `IEEE CEAL ${yearToTry} EXECOM`;
+        }
         
         // If we're showing a different year than requested, log it
         if (yearToTry != requestedYear) {
