@@ -9,20 +9,529 @@ window.FALLBACK_DATA = {
         projects: 8,
         events: 42
     },
-    execomYears: [2024, 2023, 2022],
+    execomYears: [2025, 2026],
     execom: {
-        heading: {
-            Society: {
+        "heading": {
+            "Society": {
                 "Professional Execom": [
-                    { id: 1, Name: "Dr. Placeholder", role: "Branch Counselor", email: "counselor@example.com", photo_url: "https://placehold.co/400?text=Counselor" }
+                    {
+                        "year": 2025,
+                        "name": "Remya",
+                        "role": "Staff Advisor",
+                        "society": "IEEE SB CEAL",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Akhil A S",
+                        "role": "Mentor",
+                        "society": "IEEE SB CEAL",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
                 ],
-                "IEEE SB CEAL": [
-                    { id: 2, Name: "John Doe", role: "Chair", email: "chair@example.com", photo_url: "https://placehold.co/400?text=Chair" },
-                    { id: 3, Name: "Jane Smith", role: "Vice Chair", email: "vicechair@example.com", photo_url: "https://placehold.co/400?text=Vice+Chair" }
+                "SB": [
+                    {
+                        "year": 2025,
+                        "name": "Siva Kumar M S",
+                        "role": "Chairperson",
+                        "email": "Anandhusiva1234@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/siva-kumar-m-s-735a3a243",
+                        "instagram": "https://www.instagram.com/siva_anandhu004",
+                        "github": "https://github.com/SivaKumar-004",
+                        "website": "https://sivakumarms.tech/"
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Pranav S",
+                        "role": "Vice Chair",
+                        "email": "pranavs2005@ieee.org",
+                        "linkedin": "https://www.linkedin.com/in/ps2005",
+                        "instagram": "https://www.instagram.com/__pr.an.av_",
+                        "github": "https://github.com/pranavsachu",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Saranya A",
+                        "role": "Secretary",
+                        "email": "saranyaa@ieee.org",
+                        "linkedin": "https://www.linkedin.com/in/saranya-a-01a56a291/",
+                        "instagram": "https://www.instagram.com/s_xranya",
+                        "github": "https://github.com/Saranya53430",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Anandhu H Kurup",
+                        "role": "Jt Secretary",
+                        "email": "hkurupanandhu@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/anandhu-h-kurup-8a6547292",
+                        "instagram": "https://www.instagram.com/anandhu.h.kurup/",
+                        "github": "https://github.com/KURUPcODER",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Sreedev S S",
+                        "role": "Web Master",
+                        "email": "sreedevss05@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/sreedevss/",
+                        "instagram": "https://www.instagram.com/_mt_yt_/",
+                        "github": "https://github.com/MTCodes01",
+                        "website": "https://sreedevss.me/"
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Seetha lekshmi G",
+                        "role": "Design Team",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Dhyan S",
+                        "role": "Design Team",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Abhinav N A",
+                        "role": "Design Team",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Diya Rajeev",
+                        "role": "Content Writer",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Muhammed Haisam",
+                        "role": "Membership Developer",
+                        "email": "muhammedhaizam77@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/muhammed-haisam-464643302",
+                        "instagram": "https://www.instagram.com/haizzzam/",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Gouri Krishna B",
+                        "role": "Membership Developer",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Swaroop Suresh",
+                        "role": "Link Rep",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Sofia B",
+                        "role": "Treasurer",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Harigovind P Nair",
+                        "role": "Media Lead",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Manav M",
+                        "role": "Event Coordinator",
+                        "email": "manavmkutty123@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/manav-m-3407352b0",
+                        "instagram": "https://www.instagram.com/_______manav.m.kutty_______/",
+                        "github": "",
+                        "website": "",
+                        "x": "https://x.com/Manav_M6",
+                        "facebook": "https://www.facebook.com/manav.mkutty.1"
+                    }
+                ],
+                "EMBS": [
+                    {
+                        "year": 2025,
+                        "name": "Halil Muhammed K V",
+                        "role": "Chairperson",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Jasmin Varghese",
+                        "role": "Vice Chair",
+                        "email": "jasminpanavely@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/jasmin-varghese-445723291",
+                        "instagram": "https://www.instagram.com/_jaa.mii_/",
+                        "github": "https://github.com/jaami22",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Athira M",
+                        "role": "Secretary",
+                        "email": "mathira226@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/athira-m-742b63328",
+                        "instagram": "https://www.instagram.com/athixa_athix",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Asiya S",
+                        "role": "Woman in EMBS",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "SPS": [
+                    {
+                        "year": 2025,
+                        "name": "Akash U",
+                        "role": "Chairperson",
+                        "email": "akashunnikrishnan1844@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/akash-u-269725291",
+                        "instagram": "https://www.instagram.com/akash__unnikrishnan",
+                        "github": "https://github.com/Akashunnikrishanan",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Ameya sunil",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Dhanush S",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Amrtha M Raj",
+                        "role": "Women in SPS",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "RAS": [
+                    {
+                        "year": 2025,
+                        "name": "Halil Muhammed K V",
+                        "role": "Chairperson",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Athul A S",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Sreehari S",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Ashna M R",
+                        "role": "Women in RAS",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "WIE": [
+                    {
+                        "year": 2025,
+                        "name": "Hema Baby",
+                        "role": "Chairperson",
+                        "email": "hemababy1802@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/hema-baby-9a8330255",
+                        "instagram": "https://www.instagram.com/thomas.hema",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "PAVITHRA MADHUSOODHANAN",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Archa Suresh",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "G J Malavika",
+                        "role": "Jt Secretary",
+                        "email": "malavikagj0@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/g-j-malavika-52650432a",
+                        "instagram": "https://www.instagram.com/malavyka_",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "IAS": [
+                    {
+                        "year": 2025,
+                        "name": "Aashray J Pramod",
+                        "role": "Chairperson",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Vandana Ramesh",
+                        "role": "Vice Chair",
+                        "email": "vandanaramesh2992@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/vandana-ramesh-5a05a1292",
+                        "instagram": "https://www.instagram.com/_vandana__ramesh_",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Harigovind P Nair",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Abhirami Anil",
+                        "role": "Women in IAS",
+                        "email": "maniveena225@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/abhirami-anil-b73ba1331",
+                        "instagram": "https://www.instagram.com/a__abhi.__.__",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "CS": [
+                    {
+                        "year": 2025,
+                        "name": "Aromal S S",
+                        "role": "Chairperson",
+                        "email": "aromalsuresh8989@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/aromal-suresh-a237b82b9",
+                        "instagram": "https://www.instagram.com/aromal._.suresh",
+                        "github": "https://github.com/AROMALSURESH",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Sidharth A",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Abhinand Sajin",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Nithya Sanalkumar",
+                        "role": "Women in CS",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "PES": [
+                    {
+                        "year": 2025,
+                        "name": "Aswanth",
+                        "role": "Chairperson",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Sneha T",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "ADITHYA LEKSHMI S S",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "SANA S",
+                        "role": "Women in PES",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
+                ],
+                "PELS": [
+                    {
+                        "year": 2025,
+                        "name": "Noopura D S",
+                        "role": "Chairperson",
+                        "email": "noopura2005@gmail.com",
+                        "linkedin": "https://www.linkedin.com/in/noopura-d-s-001949292",
+                        "instagram": "https://www.instagram.com/noopura_santhosh/",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Aromal B S",
+                        "role": "Vice Chair",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": "",
+                        "photo_url": "aromal1"
+                    },
+                    {
+                        "year": 2025,
+                        "name": "ASHMI G SUNEER",
+                        "role": "Secretary",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    },
+                    {
+                        "year": 2025,
+                        "name": "Anu S",
+                        "role": "Women in PELS",
+                        "email": "",
+                        "linkedin": "",
+                        "instagram": "",
+                        "github": "",
+                        "website": ""
+                    }
                 ]
             }
         }
     },
+
     events: [
         {
             id: 1,
