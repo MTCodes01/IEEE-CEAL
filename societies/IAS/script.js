@@ -5,7 +5,7 @@ let latestYear = null;
 // Count Up Animation Configuration
 const countUpConfig = {
   years: {
-    element: '.participations',
+    element: '.years',
     endValue: 0,
     duration: 2000, // milliseconds
     startDelay: 0   // delay before starting
@@ -115,7 +115,8 @@ function animateCountUp(config) {
 }
 
 // Initialize all animations
-function startCountUpAnimations() {
+async function startCountUpAnimations() {
+  await window.fetchDynamicStats(countUpConfig, false, 'IAS');
   Object.values(countUpConfig).forEach(config => {
     animateCountUp(config);
   });

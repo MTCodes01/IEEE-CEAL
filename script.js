@@ -1,4 +1,5 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbw9MXA3T0vC4bg1Rwqz7DY8xRAEQ8EjaQGLjZR6SEE90QoXvEWEfpsinLvJRUPfrGyaug/exec';
+const API_URL = CONFIG.API_BASE_URL;
+const PAGE_API_URL = `${API_URL}/pages/`;
 
 let latestYear = null;
 
@@ -115,7 +116,8 @@ function animateCountUp(config) {
 }
 
 // Initialize all animations
-function startCountUpAnimations() {
+async function startCountUpAnimations() {
+  await window.fetchDynamicStats(countUpConfig, true, null);
   Object.values(countUpConfig).forEach(config => {
     animateCountUp(config);
   });
@@ -200,13 +202,118 @@ function AnimateLogoBar() {
   }, startDelay);
 }
 
+function initMarquee() {
+  const content = document.querySelector('.marquee-content');
+  if (!content) return;
+
+  const unit = content.querySelector('.marquee-text');
+  if (!unit) return;
+
+  // Clone the unit 5 times to ensure enough content to fill any screen
+  // (Total 6 units: original + 5 clones)
+  // 6 is an even number, which works perfectly with the -50% CSS translation
+  for (let i = 0; i < 5; i++) {
+    const clone = unit.cloneNode(true);
+    content.appendChild(clone);
+  }
+}
+
+async function hydratePage() {
+  const path = window.location.pathname;
+  let pageName = 'home';
+  
+  if (path.includes('/about/')) {
+    pageName = 'about';
+  } else if (path.includes('/events/')) {
+    pageName = 'events';
+  } else if (path.includes('/gallery/')) {
+    pageName = 'gallery';
+  } else if (path.includes('/societies/')) {
+    pageName = 'societies';
+  } else if (path.includes('/contact/')) {
+    pageName = 'contact';
+  } else if (path.includes('/resources/')) {
+    pageName = 'resources';
+  }
+  
+  try {
+    const response = await fetch(`${PAGE_API_URL}${pageName}/`);
+    const data = await response.json();
+    
+    if (data.status === 'success' && data.page) {
+      const page = data.page;
+      
+      // 1. Update Hero Section (Common across many pages)
+      const landingPage = document.querySelector('.landing-page') || document.querySelector('.societies-hero');
+      const landingTitle = document.querySelector('#page-title') || 
+                           document.querySelector('.landing-content h1') || 
+                           document.querySelector('.hero-content h1');
+      const landingSubtitle = document.querySelector('#page-subtitle') || 
+                              document.querySelector('.landing-content p') || 
+                              document.querySelector('.hero-content p');
+      
+      if (page.main_image_url && landingPage) {
+        landingPage.style.backgroundImage = `url('${page.main_image_url}')`;
+      }
+      if (page.title && landingTitle) landingTitle.innerText = page.title;
+      if (page.subtitle && landingSubtitle) landingSubtitle.innerText = page.subtitle;
+      
+      // 2. Update About Section (Specific to Home/About)
+      const aboutSection = document.querySelector('.about-section');
+      if (aboutSection) {
+        const aboutTitle = aboutSection.querySelector('.left-column h1');
+        const aboutSubtitle = aboutSection.querySelector('.left-column h2');
+        const aboutDescription = aboutSection.querySelector('.right-column p');
+        const aboutPointsList = aboutSection.querySelector('.right-column ul');
+        
+        if (pageName === 'home') {
+           // On home page, we might use the description for the about section
+           if (page.description && aboutDescription) aboutDescription.innerText = page.description;
+        } else {
+           // On about page, we update everything from the API
+           if (page.title && aboutTitle) aboutTitle.innerText = page.title;
+           if (page.subtitle && aboutSubtitle) aboutSubtitle.innerText = page.subtitle;
+           if (page.description && aboutDescription) aboutDescription.innerText = page.description;
+        }
+        
+        // Handle extra_data points if any
+        if (page.extra_data && page.extra_data.points && Array.isArray(page.extra_data.points) && aboutPointsList) {
+          aboutPointsList.innerHTML = page.extra_data.points.map(point => `<li>${point}</li>`).join('');
+        }
+      }
+
+      // 3. Update Gallery/Events specific headers if they exist
+      const galleryHeader = document.querySelector('.gallery-header');
+      if (galleryHeader && pageName === 'gallery') {
+          const ghTitle = galleryHeader.querySelector('h1');
+          const ghSub = galleryHeader.querySelector('p');
+          if (page.title && ghTitle) ghTitle.innerText = page.title;
+          if (page.subtitle && ghSub) ghSub.innerText = page.subtitle;
+      }
+
+      const socTitle = document.querySelector('.section-title');
+      if (socTitle && pageName === 'societies') {
+          if (page.title) socTitle.innerText = page.title;
+      }
+    }
+  } catch (error) {
+    console.warn('Dynamic page hydration failed:', error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Hydrate page content from API
+  hydratePage();
+
   // Initialize the stats section
   setupIntersectionObserver(".stats", startCountUpAnimations, { threshold: 0.5, once: true });
 
   // Initialize the logo bar animation
   setupIntersectionObserver("#LogoBar", AnimateLogoBar, { threshold: 0.1, once: true });
 
+  // Initialize dynamic marquee
+  initMarquee();
+
   // Fetch and display people by roles
   // FetchPeopleByRoles();
-});
+});

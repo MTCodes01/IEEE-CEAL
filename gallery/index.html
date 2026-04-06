@@ -4,261 +4,767 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon! Exciting Things Are Brewing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/responsive.css">
+    <title>Gallery - IEEE CEAL</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        :root {
-            --primary-color: #2c3e50;
-            /* A professional, dark blue */
-            --secondary-color: #3498db;
-            /* A bright, friendly blue */
-            --background-color: #ecf0f1;
-            --text-color: #34495e;
-            --container-bg: #ffffff;
+        /* Gallery specific styles */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        .gallery-header {
             text-align: center;
-            overflow: hidden;
-            /* Prevents scrollbars from the background animation */
+            margin-bottom: 3rem;
         }
 
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .gallery-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .gallery-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .year-filters {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .year-chip {
+            padding: 0.6rem 1.2rem;
+            background: #f0f2f5;
+            color: var(--text-light);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .year-chip:hover {
+            background: #e4e6eb;
+            transform: translateY(-2px);
+        }
+
+        .year-chip.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 85, 164, 0.3);
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .search-input {
             width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #3498db, #8e44ad, #e74c3c, #f1c40f);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
         }
 
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.1);
+        }
 
-            50% {
-                background-position: 100% 50%;
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        /* Load More Button */
+        .load-more-container {
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .load-more-btn {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .load-more-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 85, 164, 0.25);
+        }
+
+        .load-more-btn i {
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+
+        .load-more-btn:hover i {
+            transform: translateY(2px);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            background: var(--gradient-card);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .gallery-item-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-item-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-content {
+            padding: 1.5rem;
+        }
+
+        .gallery-item-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-item-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .gallery-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .gallery-item-event {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
             100% {
-                background-position: 0% 50%;
+                transform: rotate(360deg);
             }
         }
 
-        .container {
-            background-color: var(--container-bg);
-            padding: 40px 50px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 90%;
-            animation: fadeIn 1.5s ease-in-out;
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            animation: zoomIn 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            margin: 0 auto;
+        }
+
+        .modal-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--accent);
+        }
+
+        .modal-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
-        .logo {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* Fun little gear animation for the logo */
-        .logo .fa-cogs {
-            margin-right: 10px;
-            animation: spin 8s linear infinite;
-        }
-
-        @keyframes spin {
+        @keyframes zoomIn {
             from {
-                transform: rotate(0deg);
+                transform: scale(0.8);
             }
 
             to {
-                transform: rotate(360deg);
+                transform: scale(1);
             }
         }
 
-        h1 {
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 2em;
-            margin-bottom: 15px;
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #e74c3c;
         }
 
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 25px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 35%;
-            /* Adjust this to show your "progress" */
-            height: 20px;
-            background-color: var(--secondary-color);
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 40px 40px;
-            border-radius: 25px;
-            animation: progressAnimation 2s linear infinite;
-        }
-
-        @keyframes progressAnimation {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 40px 0;
-            }
-        }
-
-        .subtitle {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .email-form {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .email-input {
-            width: 60%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .email-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .notify-btn {
-            padding: 12px 20px;
-            border: none;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .notify-btn:hover {
-            background-color: #2980b9;
-            /* A darker shade of the secondary color */
-            transform: translateY(-2px);
-        }
-
-        .social-icons {
-            margin-top: 20px;
-        }
-
-        .social-icons a {
-            color: var(--primary-color);
-            font-size: 1.8em;
-            margin: 0 15px;
-            transition: color 0.3s, transform 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: var(--secondary-color);
-            transform: scale(1.2);
-        }
-
-        footer {
-            margin-top: 25px;
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-
-        .go-back-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .go-back-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
+        .error-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
         }
     </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <!-- Nav bar -->
+    <div id="NavBar"></div>
 
-    <div class="background-animation"></div>
-
-    <div class="container">
-        <div class="logo">
-            <i class="fas fa-cogs"></i> IEEE SB CEAL
+    <div class="landing-page landing-page-gallery">
+        <div class="landing-content">
+            <h1 id="page-title">Gallery</h1>
+            <p id="page-subtitle"></p>
+            <a href="#LogoBar" class="explore-btn">Explore Gallery</a>
         </div>
-
-        <h1>We're Crafting Something Amazing!</h1>
-
-        <p>We're not just putting together a website, we're crafting an experience that will make you feel proud to be a part of the IEEE SB CEAL community. We promise it will be worth the wait!</p>
-
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <button onclick="window.history.back()" class="go-back-btn">
-                Go Back
-            </button>
-        </div>
-
     </div>
 
+    <!-- Logo Bar -->
+    <div class="bg-gray-100 py-6 px-4">
+        <div id="LogoBar" class="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12 max-w-7xl mx-auto scroll-mt-[10vh]">
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-CS_logo-color.png"
+                alt="IEEE Computer Society Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-EMBS_Logo-color.png"
+                alt="IEEE EMBS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PELS_Logo-color.png"
+                alt="IEEE PELS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-PES_Logo-color.png"
+                alt="IEEE PES Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-RAS_Logo-color.png"
+                alt="IEEE RAS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-SPS_Logo-color.png"
+                alt="IEEE SPS Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-WIE_logo-color.png"
+                alt="IEEE WIE Logo" />
+            <img class="h-8 sm:h-10 md:h-12 lg:h-14 object-contain" src="/logos/color/IEEE-IAS_Logo-color.png"
+                alt="IEEE IAS Logo" />
+        </div>
+    </div>
+
+    <!-- Gallery Content -->
+    <div id="gallery-content" class="gallery-container">
+        <div class="gallery-header">
+            <h1>Our Gallery</h1>
+            <p>Browse through our collection of memorable events and activities</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="year-filters" id="year-filters">
+                    <div class="year-chip active" onclick="filterByYear('all', this)">All Years</div>
+                    <!-- Years will be populated here -->
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="event-filter" class="search-input" placeholder="Search events..."
+                        onkeyup="debounceSearch(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Loading gallery images...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error-state" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error Loading Gallery</h3>
+            <p id="error-message"></p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty" class="empty-state" style="display: none;">
+            <i class="fas fa-images"></i>
+            <h3>No Images Found</h3>
+            <p>Try adjusting your filters or check back later for new content.</p>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="gallery-grid" class="gallery-grid"></div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="load-more-container" style="display: none;">
+            <button class="load-more-btn" onclick="loadMoreImages()">
+                Load More <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modal-image" class="modal-image" src="" alt="">
+            <div class="modal-info">
+                <h3 id="modal-title"></h3>
+                <p id="modal-description"></p>
+                <div class="gallery-item-meta">
+                    <span id="modal-event"></span>
+                    <span id="modal-date"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="Footer"></div>
+
+    <script src="/config.js"></script>
+    <script src="/script.js"></script>
+    <script src="/loader.js"></script>
+
+    <script>
+        // Gallery data
+        let allGalleryImages = [];
+        let filteredImages = [];
+        let displayedCount = 0;
+        const ITEMS_PER_PAGE = 12;
+        let currentYearFilter = 'all';
+        let currentSearchQuery = '';
+
+        // API base URL - Change this to your production domain when deploying
+        const API_BASE = CONFIG.API_BASE_URL;
+
+        // Fetch all gallery images
+        async function fetchGalleryImages() {
+            showLoading();
+            hideError();
+            hideEmpty();
+            document.getElementById('load-more-container').style.display = 'none';
+
+            try {
+                // Fetch ALL images initially
+                const url = `${API_BASE}/gallery/`;
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'error') {
+                    throw new Error(data.message);
+                }
+
+                allGalleryImages = data.gallery || [];
+                applyFilters(); // Initial filter application (shows all)
+                hideLoading();
+
+            } catch (error) {
+                console.error('Error fetching gallery:', error);
+                hideLoading();
+                showError(error.message);
+            }
+        }
+
+        // Fetch available years for filter
+        async function fetchYears() {
+            try {
+                const response = await fetch(`${API_BASE}/allyears/`);
+                const data = await response.json();
+
+                const yearContainer = document.getElementById('year-filters');
+                // Keep the "All Years" chip and append others
+                const allYearsChip = yearContainer.firstElementChild;
+                yearContainer.innerHTML = '';
+                yearContainer.appendChild(allYearsChip);
+
+                data.allyears.forEach(year => {
+                    const chip = document.createElement('div');
+                    chip.className = 'year-chip';
+                    chip.textContent = year;
+                    chip.onclick = () => filterByYear(year, chip);
+                    yearContainer.appendChild(chip);
+                });
+            } catch (error) {
+                console.error('Error fetching years:', error);
+            }
+        }
+
+        // Display gallery images (append mode)
+        function displayGalleryBatch(images) {
+            const grid = document.getElementById('gallery-grid');
+
+            images.forEach(image => {
+                const item = createGalleryItem(image);
+                grid.appendChild(item);
+            });
+        }
+
+        function filterByYear(year, element) {
+            // Update UI
+            document.querySelectorAll('.year-chip').forEach(chip => chip.classList.remove('active'));
+            element.classList.add('active');
+
+            currentYearFilter = year;
+            applyFilters();
+        }
+
+        // Debounce search
+        let searchTimeout;
+        function debounceSearch(value) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentSearchQuery = value.trim().toLowerCase();
+                applyFilters();
+            }, 300);
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = ''; // Clear current grid
+            displayedCount = 0; // Reset count
+            hideEmpty();
+
+            // Filter the master list
+            filteredImages = allGalleryImages.filter(img => {
+                const matchYear = currentYearFilter === 'all' || img.year == currentYearFilter;
+
+                if (!matchYear) return false;
+
+                if (currentSearchQuery.length === 0) return true;
+
+                // Smart Search:
+                // 1. Split query into terms (e.g. "tech 2024" -> ["tech", "2024"])
+                // 2. Check if EVERY term exists in at least one field (Title, Event, Description)
+                const terms = currentSearchQuery.split(' ').filter(t => t.length > 0);
+
+                const searchableText = [
+                    img.title,
+                    img.event_name,
+                    img.description,
+                    formatDate(img.upload_date)
+                ].filter(Boolean).join(' ').toLowerCase();
+
+                // All terms must be found in the combined text string
+                return terms.every(term => searchableText.includes(term));
+            });
+
+            if (filteredImages.length === 0) {
+                showEmpty();
+                document.getElementById('load-more-container').style.display = 'none';
+            } else {
+                loadMoreImages();
+            }
+        }
+
+        // Load More Logic
+        function loadMoreImages() {
+            const nextBatch = filteredImages.slice(displayedCount, displayedCount + ITEMS_PER_PAGE);
+            displayGalleryBatch(nextBatch);
+            displayedCount += nextBatch.length;
+
+            // Show/Hide Load More button
+            const loadMoreBtn = document.getElementById('load-more-container');
+            if (displayedCount < filteredImages.length) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        // Create gallery item element
+        function createGalleryItem(image) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.onclick = () => openModal(image);
+
+            const img = document.createElement('img');
+            img.className = 'gallery-item-image';
+            img.src = image.image_url;
+            img.alt = image.title;
+            img.loading = 'lazy';
+
+            const content = document.createElement('div');
+            content.className = 'gallery-item-content';
+
+            const title = document.createElement('h3');
+            title.className = 'gallery-item-title';
+            title.textContent = image.title;
+
+            const description = document.createElement('p');
+            description.className = 'gallery-item-description';
+            description.textContent = image.description || 'No description available';
+
+            const meta = document.createElement('div');
+            meta.className = 'gallery-item-meta';
+
+            const event = document.createElement('span');
+            if (image.event_name) {
+                event.className = 'gallery-item-event';
+                event.textContent = image.event_name;
+            }
+
+            const date = document.createElement('span');
+            date.textContent = formatDate(image.upload_date);
+
+            meta.appendChild(event);
+            meta.appendChild(date);
+
+            content.appendChild(title);
+            content.appendChild(description);
+            content.appendChild(meta);
+
+            item.appendChild(img);
+            item.appendChild(content);
+
+            return item;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Modal functions
+        function openModal(image) {
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modal-image').src = image.image_url;
+            document.getElementById('modal-title').textContent = image.title;
+            document.getElementById('modal-description').textContent = image.description || 'No description available';
+            document.getElementById('modal-event').textContent = image.event_name || '';
+            document.getElementById('modal-date').textContent = formatDate(image.upload_date);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        window.onclick = function (event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Loading/Error/Empty state functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('gallery-grid').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('gallery-grid').style.display = 'grid';
+        }
+
+        function showError(message) {
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('gallery-grid').style.display = 'none';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function showEmpty() {
+            document.getElementById('empty').style.display = 'block';
+            document.getElementById('gallery-grid').style.display = 'none';
+        }
+
+        function hideEmpty() {
+            document.getElementById('empty').style.display = 'none';
+            document.getElementById('gallery-grid').style.display = 'grid';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchYears();
+            fetchGalleryImages(); // No args, fetches all
+            window.loadPageHeader('gallery');
+        });
+    </script>
 </body>
 
 </html>

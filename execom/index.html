@@ -15,8 +15,8 @@
 
   <div class="landing-page-execom">
     <div class="landing-content">
-        <h1 id="ExecomMainText"></h1>
-         <a href="#team" class="view-team">View Team</a>
+      <h1 id="ExecomMainText"></h1>
+      <a href="#team" class="view-team">View Team</a>
     </div>
   </div>
   <section>
@@ -27,7 +27,16 @@
 
   <div id="Footer"></div>
 
+  <script src="../config.js"></script>
   <script src="./script.js"></script>
   <script src="../loader.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const year = urlParams.get('year');
+      window.loadPageHeader('execom', year);
+    });
+  </script>
 </body>
+
 </html>

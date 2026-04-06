@@ -4,261 +4,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon! Exciting Things Are Brewing</title>
+    <title>Resources - IEEE CEAL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/responsive.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
         :root {
-            --primary-color: #2c3e50;
-            /* A professional, dark blue */
-            --secondary-color: #3498db;
-            /* A bright, friendly blue */
-            --background-color: #ecf0f1;
-            --text-color: #34495e;
-            --container-bg: #ffffff;
+            --ieee-blue: #00629B;
+            --ieee-dark-blue: #003057;
+            --ieee-light-blue: #00B5E2;
+            --accent-yellow: #FFC72C;
+            --text-main: #1A202C;
+            --text-muted: #718096;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            overflow: hidden;
-            /* Prevents scrollbars from the background animation */
+            background-color: #F7FAFC;
         }
 
-        .background-animation {
-            position: fixed;
+        /* Hero / Search Section */
+        .resources-hero {
+            background: linear-gradient(135deg, var(--ieee-dark-blue) 0%, var(--ieee-blue) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resources-hero::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.ieee.org/content/dam/ieee-org/ieee/web/org/globals/header-bg-texture.png');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 40px auto 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-input {
             width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #3498db, #8e44ad, #e74c3c, #f1c40f);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .container {
-            background-color: var(--container-bg);
-            padding: 40px 50px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 90%;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* Fun little gear animation for the logo */
-        .logo .fa-cogs {
-            margin-right: 10px;
-            animation: spin 8s linear infinite;
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 25px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 55%;
-            /* Adjust this to show your "progress" */
-            height: 20px;
-            background-color: var(--secondary-color);
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 40px 40px;
-            border-radius: 25px;
-            animation: progressAnimation 2s linear infinite;
-        }
-
-        @keyframes progressAnimation {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 40px 0;
-            }
-        }
-
-        .subtitle {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .email-form {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .email-input {
-            width: 60%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .email-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .notify-btn {
-            padding: 12px 20px;
+            padding: 18px 25px 18px 60px;
+            border-radius: 50px;
             border: none;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+            color: var(--text-main);
+            outline: none;
+            transition: var(--transition);
         }
 
-        .notify-btn:hover {
-            background-color: #2980b9;
-            /* A darker shade of the secondary color */
+        .search-input:focus {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             transform: translateY(-2px);
         }
 
-        .social-icons {
-            margin-top: 20px;
+        .search-icon {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ieee-blue);
+            font-size: 1.2rem;
         }
 
-        .social-icons a {
-            color: var(--primary-color);
-            font-size: 1.8em;
-            margin: 0 15px;
-            transition: color 0.3s, transform 0.3s;
+        /* Filter Pills */
+        .filters-section {
+            margin: -30px 0 50px;
+            position: relative;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 0 20px;
         }
 
-        .social-icons a:hover {
-            color: var(--secondary-color);
-            transform: scale(1.2);
+        .filter-pill {
+            background: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            color: var(--ieee-blue);
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        footer {
-            margin-top: 25px;
-            font-size: 0.9em;
-            color: #7f8c8d;
+        .filter-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--ieee-light-blue);
         }
 
-        .go-back-btn {
-            background-color: var(--primary-color);
+        .filter-pill.active {
+            background: var(--ieee-blue);
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 98, 155, 0.3);
+        }
+
+        /* Resource Cards */
+        .resource-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #edf2f7;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-image-wrap {
+            height: 180px;
+            background: #edf2f7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .resource-card:hover .card-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        .card-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-yellow);
+            color: var(--ieee-dark-blue);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ieee-dark-blue);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #4A5568;
+            margin-bottom: 25px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-access {
+            background: var(--ieee-blue);
             color: white;
             padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .go-back-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
+        .btn-access:hover {
+            background: var(--ieee-dark-blue);
+            padding-right: 25px;
+        }
+
+        /* Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <div id="NavBar"></div>
 
-    <div class="background-animation"></div>
-
-    <div class="container">
-        <div class="logo">
-            <i class="fas fa-cogs"></i> IEEE SB CEAL
+    <section class="resources-hero landing-page-resources">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 id="page-title" class="text-4xl md:text-5xl font-extrabold mb-4">Member Resources</h1>
+            <p id="page-subtitle" class="text-xl opacity-90 max-w-2xl mx-auto">Discover essential technical content, professional development tools, and member-exclusive benefits.</p>
+            
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="resource-search" class="search-input" placeholder="Search by title, category, or description..." oninput="handleSearch()">
+            </div>
         </div>
+    </section>
 
-        <h1>Exciting Updates Are On The Way!</h1>
-
-        <p>Our team is diligently crafting an innovative and engaging experience for you. Stay tuned for something truly special, coming soon!</p>
-
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <button onclick="window.history.back()" class="go-back-btn">
-                Go Back
-            </button>
-        </div>
-
+    <div class="filters-section" id="category-filters">
+        <button class="filter-pill active" onclick="filterByCategory('all', this)">
+            <i class="fa-solid fa-list-ul"></i> All Resources
+        </button>
+        <!-- Dynamic categories -->
     </div>
 
+    <main class="resource-grid" id="resource-grid">
+        <!-- Skeleton Loaders -->
+        <div class="resource-card skeleton h-96"></div>
+        <div class="resource-card skeleton h-96"></div>
+        <div class="resource-card skeleton h-96"></div>
+    </main>
+
+    <div id="Footer"></div>
+
+    <script src="/config.js"></script>
+    <script src="/script.js"></script>
+    <script>
+        let allResources = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        async function loadResources() {
+            const grid = document.getElementById('resource-grid');
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/resources/`);
+                const data = await res.json();
+                
+                if (data.status === 'success' && data.resources) {
+                    allResources = data.resources;
+                    
+                    // Populate filters
+                    const categories = [...new Set(allResources.map(r => r.category))].filter(Boolean).sort();
+                    const filterContainer = document.getElementById('category-filters');
+                    
+                    // Clear existing categories beyond the 'All' button
+                    const allBtn = filterContainer.querySelector('.filter-pill.active');
+                    filterContainer.innerHTML = '';
+                    filterContainer.appendChild(allBtn);
+
+                    categories.forEach(cat => {
+                        const btn = document.createElement('button');
+                        btn.className = 'filter-pill';
+                        btn.innerHTML = `<i class="fa-solid fa-tag"></i> ${cat}`;
+                        btn.onclick = () => filterByCategory(cat, btn);
+                        filterContainer.appendChild(btn);
+                    });
+
+                    renderResources();
+                } else {
+                    grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500">No resources found yet.</div>';
+                }
+            } catch (error) {
+                console.error(error);
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500">Failed to load resources.</div>';
+            }
+        }
+
+        function renderResources() {
+            const grid = document.getElementById('resource-grid');
+            grid.innerHTML = '';
+
+            const filtered = allResources.filter(res => {
+                const matchesCategory = currentFilter === 'all' || res.category === currentFilter;
+                const matchesSearch = !searchQuery || 
+                    res.title.toLowerCase().includes(searchQuery) || 
+                    (res.description || '').toLowerCase().includes(searchQuery) ||
+                    res.category.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500"><i class="fa-solid fa-box-open text-4xl mb-4 block"></i> No resources match your search.</div>';
+                return;
+            }
+
+            filtered.forEach(res => {
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                card.innerHTML = `
+                    <div class="card-image-wrap">
+                        <img src="${res.thumbnail_url || 'https://www.ieee.org/content/dam/ieee-org/ieee/web/org/globals/ieee-logo.png'}" alt="${res.title}" onerror="this.src='https://blocks.astratic.com/img/general-img-landscape.png'">
+                        ${res.category ? `<span class="card-category">${res.category}</span>` : ''}
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${res.title}</h3>
+                        <div class="card-meta">
+                            <span><i class="fa-regular fa-calendar-days mr-2"></i> ${res.date || 'Free Resource'}</span>
+                        </div>
+                        <p class="card-desc">${res.description || 'Access high-quality technical content and professional development materials curated for IEEE members.'}</p>
+                        <div class="card-footer">
+                            <a href="${res.link}" target="_blank" class="btn-access">
+                                View Resource <i class="fa-solid fa-chevron-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterByCategory(category, element) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            element.classList.add('active');
+            renderResources();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('resource-search').value.toLowerCase();
+            renderResources();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadResources();
+            window.loadPageHeader('resources');
+        });
+    </script>
+    <script src="/loader.js"></script>
 </body>
 
 </html>
